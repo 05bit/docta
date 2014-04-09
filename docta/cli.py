@@ -17,7 +17,8 @@ ERROR_LOG = 'docta-error.log'
 
 def main():
     try:
-        DoctaCLI()
+        cli = DoctaCLI()
+        cli.run()
     except Exception as e:
         exit_with_error(e.message)
     return OK_CODE
@@ -54,12 +55,11 @@ class DoctaCLI(object):
     """
     def __init__(self):
         self.init_parser()
-        self.init_config()
-        self.run()
 
     def init_parser(self):
         parser = DoctaArgParser(description=self.__doc__)
-        parser.add_argument('-c', '--config', help='config file to use [default: %(default)s]',
+        parser.add_argument('-c', '--config',
+                            help='config file to use [default: %(default)s]',
                             default='docta.conf')
         sub_parsers = parser.add_subparsers(dest='command')
 
@@ -82,12 +82,6 @@ class DoctaCLI(object):
         self.parser = parser
         self.args = parser.parse_args()
 
-    def init_config(self):
-        config_path = os.path.join(self.current_dir(), self.args.config)
-        config_file = open(config_path, 'r')
-        self.config = json.load(config_file)
-        config_file.close()
-
     def run(self):
         if self.args.command:
             getattr(self, 'cmd_%s' % self.args.command)()
@@ -97,31 +91,45 @@ class DoctaCLI(object):
     def current_dir(self):
         return os.getcwd()
 
+    def current_config(self):
+        if not hasattr(self, '_config'):
+            config_path = os.path.join(self.current_dir(), self.args.config)
+            
+            try:
+                config_file = open(config_path, 'r')
+            except:
+                raise Exception("can't load config file: %s" % config_path)
+
+            try:
+                self._config = json.load(config_file)
+            except Exception as e:
+                raise Exception("bad JSON config format! %s" % e.message)
+
+            config_file.close()
+
+        return self._config
+
     def current_project(self):
-        if not getattr(self, '_project', None):
-            self._project = docta.project.DoctaProject(self.current_dir(), **self.config)
+        if not hasattr(self, '_project'):
+            self._project = docta.project.DoctaProject(self.current_dir(),
+                                                       **self.current_config())
         return self._project
 
+    ##
+    ## Commands
+    ##
+
     def cmd_build(self):
-        project = self.current_project()
-        project.build()
+        self.current_project().build()
 
     def cmd_config(self):
-        print(json.dumps(self.config, indent=4))
-        # def _line(k, v, level=0):
-        #     if isinstance(v, dict):
-        #         for _k, _v in v.items():
-        #             _line(_k, _v, level+1)
-        #     else:
-        #         print("%s%s => %s" % ('  ' * level, k, v))
-        # _line(None, self.config, level=-1)
+        print(json.dumps(self.current_config(), indent=4))
 
     def cmd_help(self):
         self.parser.print_help()
 
     def cmd_init(self):
-        project = self.current_project()
-        project.init()
+        self.current_project().init()
 
 
 if __name__ == '__main__':
