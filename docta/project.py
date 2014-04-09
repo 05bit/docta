@@ -2,12 +2,12 @@
 Docta projects handler.
 """
 from __future__ import absolute_import, division, print_function, unicode_literals
-from future.builtins import *
+from future.builtins import super
 import os
 import shutil
 import docta.exceptions
 import docta.render
-import docta.fs as fs
+import docta.utils.fs as fs
 
 # Defaults
 INDEX_FILE = 'index.md'

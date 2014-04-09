@@ -2,7 +2,7 @@
 Command line interface (CLI) for Docta.
 """
 from __future__ import absolute_import, division, print_function, unicode_literals
-from future.builtins import *
+from future.builtins import super
 import argparse
 import json
 import os

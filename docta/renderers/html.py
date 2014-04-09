@@ -2,10 +2,10 @@
 Provides HTML rendered.
 """
 from __future__ import absolute_import, division, print_function, unicode_literals
-from future.builtins import *
+from future.builtins import super
 import docta.renderers.base as base
-import docta.fs as fs
-import docta.md as md
+import docta.utils.fs as fs
+import docta.utils.md as md
 
 HTML_INDEX = ('index', 'html')
 
