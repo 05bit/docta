@@ -90,7 +90,7 @@ class Project(object):
         """
         Create output directory if doesn't exist.
         """
-        fs.mkdirs_noerr(self.output_dir(out_format))
+        fs.mkdirs(self.output_dir(out_format))
 
     def is_relpath_masked(self, relative):
         """

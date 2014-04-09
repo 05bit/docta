@@ -5,6 +5,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from future.builtins import *
 import docta.renderers.base as base
 import docta.fs as fs
+import docta.md as md
 
 
 class Renderer(base.BaseRenderer):
@@ -18,11 +19,11 @@ class Renderer(base.BaseRenderer):
         input_tree = self.project.input_tree
 
         # Prepare output dir
-        fs.mkdirs_noerr(output_dir)
+        fs.mkdirs(output_dir)
 
         # Render output files
         for rel_path, files in input_tree:
-            fs.mkdirs_noerr(fs.path_for_dir(output_dir, rel_path))
+            fs.mkdirs(fs.path_for_dir(output_dir, rel_path))
 
             for name in files:
                 in_file_path = fs.join(input_dir, rel_path, name)
@@ -30,7 +31,8 @@ class Renderer(base.BaseRenderer):
 
                 with open(out_file_path, 'w') as out_file,\
                      open(in_file_path, 'r') as in_file:
-                        out_file.write(in_file.read())
+                        html = md.markdown(in_file.read())
+                        out_file.write(html)
 
         # Copy resources
         self.project.copy_resources(out_format)
