@@ -12,12 +12,12 @@ import sys
 
 OK_CODE = 0
 ERROR_CODE = 2
-ERROR_LOG = 'docta-error.log'
+ERROR_LOGFILE = 'docta-error.log'
 
 
 def main():
     try:
-        cli = DoctaCLI()
+        cli = CLI()
         cli.run()
     except Exception as e:
         exit_with_error(e.message)
@@ -31,7 +31,7 @@ def exit_with_error(message):
     sys.stderr.write('Error: %s\n' % message)
 
     import traceback
-    out = open(ERROR_LOG, 'wb')
+    out = open(ERROR_LOGFILE, 'wb')
     out.write('-' * 60 + '\n')
     traceback.print_exc(limit=20, file=out)
     out.write('-' * 60 + '\n')
@@ -40,7 +40,7 @@ def exit_with_error(message):
     sys.exit(ERROR_CODE)    
 
 
-class DoctaArgParser(argparse.ArgumentParser):
+class CustomArgumentParser(argparse.ArgumentParser):
     """
     Custom arguments parser with nicer error formatting.
     """
@@ -49,7 +49,7 @@ class DoctaArgParser(argparse.ArgumentParser):
             exit_with_error(message)
 
 
-class DoctaCLI(object):
+class CLI(object):
     """
     Command line interface (CLI) for Docta.
     """
@@ -57,7 +57,7 @@ class DoctaCLI(object):
         self.init_parser()
 
     def init_parser(self):
-        parser = DoctaArgParser(description=self.__doc__)
+        parser = CustomArgumentParser(description=self.__doc__)
         parser.add_argument('-c', '--config',
                             help='config file to use [default: %(default)s]',
                             default='docta.conf')
@@ -111,7 +111,7 @@ class DoctaCLI(object):
 
     def current_project(self):
         if not hasattr(self, '_project'):
-            self._project = docta.project.DoctaProject(self.current_dir(),
+            self._project = docta.project.Project(self.current_dir(),
                                                        **self.current_config())
         return self._project
 
@@ -120,7 +120,7 @@ class DoctaCLI(object):
     ##
 
     def cmd_build(self):
-        self.current_project().build()
+        self.current_project().build(['html'])
 
     def cmd_config(self):
         print(json.dumps(self.current_config(), indent=4))
