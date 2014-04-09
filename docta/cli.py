@@ -10,17 +10,23 @@ import os.path
 import docta.project
 import sys
 
+CONFIG_FILE = 'docta.conf'
 OK_CODE = 0
 ERROR_CODE = 2
 ERROR_LOGFILE = 'docta-error.log'
 
 
 def main():
+    """
+    Run command or show help message.
+    """
     try:
         cli = CLI()
         cli.run()
     except Exception as e:
         exit_with_error(e.message)
+
+    cleanup_log()
     return OK_CODE
 
 
@@ -37,7 +43,12 @@ def exit_with_error(message):
     out.write('-' * 60 + '\n')
     out.close()
 
-    sys.exit(ERROR_CODE)    
+    sys.exit(ERROR_CODE)
+
+
+def cleanup_log():
+    if os.path.isfile(ERROR_LOGFILE):
+        os.unlink(ERROR_LOGFILE)
 
 
 class CustomArgumentParser(argparse.ArgumentParser):
@@ -60,7 +71,7 @@ class CLI(object):
         parser = CustomArgumentParser(description=self.__doc__)
         parser.add_argument('-c', '--config',
                             help='config file to use [default: %(default)s]',
-                            default='docta.conf')
+                            default=CONFIG_FILE)
         sub_parsers = parser.add_subparsers(dest='command')
 
         # Command: init
@@ -103,7 +114,7 @@ class CLI(object):
             try:
                 self._config = json.load(config_file)
             except Exception as e:
-                raise Exception("bad JSON config format! %s" % e.message)
+                raise Exception("bad JSON format in config! %s" % e.message)
 
             config_file.close()
 

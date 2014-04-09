@@ -122,4 +122,5 @@ class Project(object):
         """
         in_resources = fs.path_for_dir(self.path, self.config.get('resources', '_resources'))
         out_resources = fs.path_for_dir(self.output_dir(out_format), OUT_RESOURCES_DIR)
+        shutil.rmtree(out_resources, ignore_errors=True)
         shutil.copytree(in_resources, out_resources)
