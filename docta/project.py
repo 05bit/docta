@@ -18,28 +18,28 @@ class DoctaProject(object):
         """
         Load project structure and files.
         """
-        raise NotImplemented
+        raise Exception(NotImplemented)
 
     def build(self, formats=None):
         """
         Build project with specified formats.
         """
-        raise NotImplemented
+        raise Exception(NotImplemented)
 
     def init(self):
         """
         Init empty project.
         """
-        raise NotImplemented
+        raise Exception(NotImplemented)
 
     def create_output_dir(self, format=None):
         """
         Create output directory if doesn't exist.
         """
-        raise NotImplemented
+        raise Exception(NotImplemented)
 
     def copy_resources(self, format=None):
         """
         Copy resources to output directory.
         """
-        raise NotImplemented
+        raise Exception(NotImplemented)

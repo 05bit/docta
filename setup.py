@@ -5,6 +5,18 @@ from setuptools import setup, find_packages
 
 __version__ = '0.0.1'
 
+install_requires=[
+    'future',
+    'hoedown', # 'misaka',
+    'watchdog',
+    # 'docutils',
+],
+
+try:
+    import argparse
+except ImportError:
+    install_requires.append('argparse')
+
 setup(
     name='Docta',
     version=str(__version__),
@@ -17,13 +29,7 @@ setup(
     zip_safe=False,
     packages=find_packages(),
     include_package_data=True,
-    install_requires=[
-        'future',
-        'staticjinja',
-        'hoedown', # misaka
-        'watchdog',
-        'docutils'
-    ],
+    install_requires=install_requires,
     entry_points = {
         'console_scripts': 'docta = docta.cli:main'
     },
