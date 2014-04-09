@@ -12,6 +12,7 @@ import sys
 
 OK_CODE = 0
 ERROR_CODE = 2
+ERROR_LOG = 'docta-error.log'
 
 
 def main():
@@ -27,6 +28,14 @@ def exit_with_error(message):
     Show error message and exit with error code.
     """
     sys.stderr.write('Error: %s\n' % message)
+
+    import traceback
+    out = open(ERROR_LOG, 'wb')
+    out.write('-' * 60 + '\n')
+    traceback.print_exc(limit=20, file=out)
+    out.write('-' * 60 + '\n')
+    out.close()
+
     sys.exit(ERROR_CODE)    
 
 
@@ -66,7 +75,7 @@ class DoctaCLI(object):
         cmd_build = sub_parsers.add_parser('build',
             help='build project')
 
-        # Command: build
+        # Command: help
         cmd_help = sub_parsers.add_parser('help',
             help='show this help message and exit')
 
