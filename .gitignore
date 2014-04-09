@@ -1,0 +1,12 @@
+# Junk
+.DS_Store
+*.tmp
+*.bak
+
+# Compiled
+*.pyc
+*.pyo
+
+# Build
+build/
+*.egg-info/
