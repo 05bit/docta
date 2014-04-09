@@ -5,6 +5,7 @@ import os.path
 import docta.exceptions
 
 dirname = os.path.dirname
+filename = os.path.basename
 join = os.path.join
 real = os.path.realpath
 sep = os.path.sep

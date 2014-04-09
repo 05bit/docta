@@ -74,7 +74,13 @@ class Project(object):
         """
         Input dir based on project index file.
         """
-        return fs.path_for_file(self.path, self.config.get('index', INDEX_FILE))
+        return fs.dirname(self.index_file())
+
+    def index_file(self):
+        """
+        Get full path for main index file.
+        """
+        return fs.real(fs.join(self.path, self.config.get('index', INDEX_FILE)))
 
     def files_to_render(self, files):
         """
