@@ -20,7 +20,7 @@ setup(
     install_requires=[
         'future',
         'staticjinja',
-        'misaka',
+        'hoedown', # misaka
         'watchdog',
         'docutils'
     ],
