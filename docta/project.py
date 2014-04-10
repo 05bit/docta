@@ -24,6 +24,7 @@ class Project(object):
         self.path = path
         self.config = config
         self.input_tree = []
+        self.title = config['title']
 
     def load(self):
         """
@@ -69,6 +70,9 @@ class Project(object):
         Output directory for specified format.
         """
         return fs.path_for_dir(self.path, self.config['output'][out_format])
+
+    def templates_dir(self):
+        return fs.path_for_dir(self.path, self.config.get('templates', '_templates'))
 
     def input_dir(self):
         """

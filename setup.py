@@ -9,6 +9,7 @@ install_requires=[
     'future',
     'hoedown', # 'misaka',
     'watchdog',
+    'jinja2',
     # 'docutils',
 ],
 
