@@ -10,6 +10,7 @@ install_requires=[
     'hoedown', # 'misaka',
     'watchdog',
     'jinja2',
+    'PyYAML'
     # 'docutils',
 ],
 

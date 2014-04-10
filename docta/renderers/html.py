@@ -1,12 +1,13 @@
 """
 Provides HTML rendered.
 """
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import absolute_import, print_function, unicode_literals
 from future.builtins import super
 import jinja2
 import docta.renderers.base as base
 import docta.utils.fs as fs
 import docta.utils.md as md
+import docta.utils.meta as meta
 
 HTML_INDEX = ('index', 'html')
 
@@ -17,7 +18,7 @@ class Renderer(base.BaseRenderer):
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.index_name = fs.filename(self.project.index_file())
+        self.index_name = fs.basename(self.project.index_file())
 
         # Jinja
         template_loader = jinja2.FileSystemLoader(self.project.templates_dir())
@@ -37,7 +38,7 @@ class Renderer(base.BaseRenderer):
         template_page = self.get_template('page.html')
 
         # Render output files
-        for rel_path, files in input_tree:
+        for rel_path, files, files_meta in input_tree:
             fs.mkdirs(fs.path_for_dir(output_dir, rel_path))
 
             for name in files:
@@ -51,10 +52,10 @@ class Renderer(base.BaseRenderer):
 
                 with open(out_file_path, 'w') as out_file,\
                      open(in_file_path, 'r') as in_file:
-                        html = self.render_template(
-                            template, md.markdown(in_file.read()),
-                            name=name)
-                        out_file.write(html)
+                        raw_content = md.markdown(meta.stripped(in_file))
+                        page_meta = files_meta.get(name, {})
+                        page_html = self.render_template(template, raw_content, **page_meta)
+                        out_file.write(page_html)
 
         # Copy resources
         self.project.copy_resources(out_format)
@@ -75,15 +76,15 @@ class Renderer(base.BaseRenderer):
             bits = name.rsplit('.', 1)
         return '.'.join((bits[0], HTML_INDEX[1]))
 
-    def render_template(self, template, content, **extra):
+    def render_template(self, template, raw_content, **page_meta):
         """
         Render specified template with project and page data.
         """
         context = {
             'project': self.project,
             'page': {
-                'html': content,
+                'html': raw_content,
             }
         }
-        context['page'].update(extra)
+        context['page'].update(page_meta)
         return template.render(**context)

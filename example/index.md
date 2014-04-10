@@ -1,3 +1,8 @@
+---
+title: Home
+sorting: A
+---
+
 Hello, I'm Docta example!
 =========================
 

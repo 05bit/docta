@@ -1,13 +1,14 @@
 """
 Docta projects handler.
 """
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import absolute_import, print_function, unicode_literals
 from future.builtins import super
 import os
 import shutil
 import docta.exceptions
 import docta.render
 import docta.utils.fs as fs
+import docta.utils.meta as meta
 
 # Defaults
 INDEX_FILE = 'index.md'
@@ -33,20 +34,21 @@ class Project(object):
         Loads `self.input_tree` as a list of tuples:
 
             [
-                ((str) relative path1, (list) files1),
-                ((str) relative path2, (list) files2),
+                ((str) relative path1, (list) files1, (dict) files meta1),
+                ((str) relative path2, (list) files2, (dict) files meta2),
                 ...
             ]
         """
         self.input_tree = []
 
         input_dir = self.input_dir()
-        for path, subdirs, files in os.walk(input_dir):
-            to_render = self.files_to_render(files)
-            if to_render:
-                rel_path = path.replace(input_dir, '', 1).strip(fs.sep)
+        for dir_path, sub_dirs, files in os.walk(input_dir):
+            files_to_render = self.files_to_render(files)
+            if files_to_render:
+                rel_path = dir_path.replace(input_dir, '', 1).strip(fs.sep)
                 if not self.is_relpath_masked(rel_path):
-                    self.input_tree.append((rel_path, to_render))
+                    files_meta = self.files_meta(dir_path, files_to_render)
+                    self.input_tree.append((rel_path, files_to_render, files_meta))
 
     def build(self, formats=None):
         """
@@ -95,6 +97,18 @@ class Project(object):
             if self.is_file_to_render(name):
                 to_render.append(name)
         return to_render
+
+    def files_meta(self, dir_path, files):
+        """
+        Extract specified files meta from specified dir path.
+        """
+        files_meta = {}
+        for name in files:
+            with open(fs.join(dir_path, name), 'r') as in_file:
+                files_meta[name] = meta.extract(in_file)
+                # TODO: make page path
+                # files_meta[name]['path'] = ...
+        return files_meta
 
     def create_output_dir(self, out_format=None):
         """
