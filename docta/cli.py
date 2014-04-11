@@ -7,8 +7,9 @@ import argparse
 import json
 import os
 import os.path
-import docta.project
 import sys
+import docta.project
+import docta.utils.server
 
 CONFIG_FILE = 'docta.conf'
 OK_CODE = 0
@@ -86,6 +87,10 @@ class CLI(object):
         cmd_build = sub_parsers.add_parser('build',
             help='build project')
 
+        # Command: serve
+        cmd_help = sub_parsers.add_parser('serve',
+            help='start local server for testing')
+
         # Command: help
         cmd_help = sub_parsers.add_parser('help',
             help='show this help message and exit')
@@ -141,6 +146,12 @@ class CLI(object):
 
     def cmd_init(self):
         self.current_project().init()
+
+    def cmd_serve(self):
+        project = self.current_project()
+        path = project.output_dir('html')
+        port = project.config['server']['port']
+        docta.utils.server.run(path, port=port)
 
 
 if __name__ == '__main__':
