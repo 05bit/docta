@@ -14,9 +14,10 @@ class Chapter(object):
     """
     Chapter is a hierarchical documents data container.
     """
-    def __init__(self, title, nav_path):
+    def __init__(self, title, nav_path, is_index=False):
         self.title = title
         self.nav_path = nav_path
+        self.dir_path = nav_path.replace('/', fs.sep) if is_index else None
         self.file_path = None
         self.meta = {}
         self.parent = None
@@ -33,6 +34,7 @@ class Chapter(object):
             self.meta = meta.extract(in_file)
 
         self.file_path = file_path
+        self.file_name = fs.basename(file_path)
         self.title = self.meta.get('title', self.title)
         self.sorting = self.meta.get('sorting', self.title)
 
@@ -67,7 +69,7 @@ class Chapter(object):
         # create index chapter
         index_name = config.get('index', INDEX_FILE)
         index_title = fs.basename(path).capitalize()
-        chapter = cls(title=index_title, nav_path=nav_path)
+        chapter = cls(title=index_title, nav_path=nav_path, is_index=True)
         if index_name in files:
             files.remove(index_name)
             chapter.load(file_path=fs.join(path, index_name))
@@ -77,7 +79,7 @@ class Chapter(object):
             file_path = fs.join(path, name)
             file_slug = cls.slug_by_name(name)
             file_nav_path = nav_path and '/'.join((nav_path, file_slug)) or file_slug
-            child = cls(title=file_slug.capitalize(), nav_path=file_nav_path)
+            child = cls(title=file_slug.capitalize(), nav_path=file_nav_path, is_index=False)
             child.load(file_path)
             chapter.add_child(child)
 

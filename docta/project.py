@@ -11,7 +11,7 @@ import docta.utils.fs as fs
 import docta.utils.meta as meta
 
 # Defaults
-INDEX_FILE = 'index.md'
+INDEX_FILE = docta.chapter.INDEX_FILE
 OUT_FORMAT_DEFAULT = 'html'
 
 
@@ -23,42 +23,15 @@ class Project(object):
     def __init__(self, path, **config):
         self.path = path
         self.config = config
-        self.input_tree = []
         self.title = config['title']
         self.logo = config['logo']
 
     def load(self):
         """
         Load project structure.
-
-        Loads `self.input_tree` as a list of tuples:
-
-            [
-                ((str) relative path1, (list) files1, (dict) files meta1),
-                ((str) relative path2, (list) files2, (dict) files meta2),
-                ...
-            ]
         """
-        # new style structure load
-        self.root = docta.chapter.Chapter.load_tree(self.input_dir(), self.config)
-        # DEBUG: print chapters tree
-        # def print_chapter(chapter, level=0):
-        #     print('  '*level, str(chapter))
-        #     for ch in chapter.children:
-        #         print_chapter(ch, level+1)
-        # print_chapter(self.root)
-
-        self.input_tree = []
-        input_dir = self.input_dir()
-        for dir_path, sub_dirs, files in os.walk(input_dir):
-            files_to_render = self.files_to_render(files)
-            if files_to_render:
-                rel_path = dir_path.replace(input_dir, '', 1).strip(fs.sep)
-                if not self.is_relpath_masked(rel_path):
-                    files_meta = self.files_meta(dir_path, files_to_render)
-                    self.input_tree.append((rel_path, files_to_render, files_meta))
-        # for ch in self.input_tree:
-        #     print(ch)
+        self.tree = [docta.chapter.Chapter.load_tree(self.input_dir(), self.config)]
+        # self.print_tree()
 
     def build(self, formats=None):
         """
@@ -98,58 +71,6 @@ class Project(object):
         """
         return fs.real(fs.join(self.path, self.config.get('index', INDEX_FILE)))
 
-    def files_to_render(self, files):
-        """
-        Get list of files to render.
-        """
-        to_render = []
-        for name in files:
-            if self.is_file_to_render(name):
-                to_render.append(name)
-        return to_render
-
-    def files_meta(self, dir_path, files):
-        """
-        Extract specified files meta from specified dir path.
-        """
-        files_meta = {}
-        for name in files:
-            with open(fs.join(dir_path, name), 'r') as in_file:
-                files_meta[name] = meta.extract(in_file)
-                # TODO: make page path
-                # files_meta[name]['path'] = ...
-        return files_meta
-
-    def create_output_dir(self, out_format=None):
-        """
-        Create output directory if doesn't exist.
-        """
-        fs.mkdirs(self.output_dir(out_format))
-
-    def is_relpath_masked(self, relative):
-        """
-        Checks if relative dir path is masked (not rendered) in build.
-        """
-        for name in relative.strip(fs.sep).split(fs.sep):
-            if self.is_name_masked(name):
-                return True
-        return False
-
-    def is_name_masked(self, name):
-        """
-        Checks if file/dir name is masked.
-        """
-        return name.startswith('_')
-
-    def is_file_to_render(self, name):
-        """
-        Checks if file is to render.
-        """
-        if not self.is_name_masked(name):
-            if name.endswith('.md'):
-                return True
-        return False
-
     def copy_resources(self, out_format=None):
         """
         Copy resources to output directory.
@@ -161,3 +82,14 @@ class Project(object):
             resource_dst = fs.join(out_resources, name)
             fs.rm(resource_dst, ignore_errors=True)
             fs.cp(resource_src, resource_dst)
+
+    def print_tree(self):
+        """
+        DEBUG: print chapters tree
+        """
+        def print_chapter(chapter, level=0):
+            print('  '*level, str(chapter))
+            for ch in chapter.children:
+                print_chapter(ch, level+1)
+        print_chapter(self.tree[0])
+

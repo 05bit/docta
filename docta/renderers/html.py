@@ -27,39 +27,52 @@ class Renderer(base.BaseRenderer):
 
     def render(self):
         out_format = self.out_format
-        input_dir = self.project.input_dir()
         output_dir = self.project.output_dir(out_format)
-        input_tree = self.project.input_tree
 
         # Prepare output dir
         fs.mkdirs(output_dir)
 
-        # Templates
-        template_index = self.get_template('index.html')
-        template_page = self.get_template('page.html')
-
-        # Render output files
-        for rel_path, files, files_meta in input_tree:
-            fs.mkdirs(fs.path_for_dir(output_dir, rel_path))
-
-            for name in files:
-                if not rel_path and name == self.index_name:
-                    template = template_index
-                else:
-                    template = template_page
-
-                in_file_path = fs.join(input_dir, rel_path, name)
-                out_file_path = fs.join(output_dir, rel_path, self.get_html_name(name))
-
-                with open(out_file_path, 'w') as out_file,\
-                     open(in_file_path, 'r') as in_file:
-                        raw_content = md.html(meta.stripped(in_file))
-                        page_meta = files_meta.get(name, {})
-                        page_html = self.render_template(template, raw_content, **page_meta)
-                        out_file.write(page_html)
+        # Render chapters
+        for chapter in self.project.tree:
+            self.render_chapter(chapter, {
+                    'index': self.get_template('index.html'),
+                    'page': self.get_template('page.html')})
 
         # Copy resources
         self.project.copy_resources(out_format)
+
+    def render_chapter(self, chapter, templates):
+        # print("Render: %s" % str(chapter))
+        output_dir = self.project.output_dir(self.out_format)
+        input_dir = self.project.input_dir()
+        in_file_path = chapter.file_path
+
+        # dir for index
+        if chapter.dir_path:
+            # print(fs.path_for_dir(output_dir, chapter.dir_path))
+            fs.mkdirs(fs.path_for_dir(output_dir, chapter.dir_path))
+
+        # render file
+        if in_file_path:
+            file_dir = fs.dirname(in_file_path)
+            rel_path = file_dir.replace(input_dir, '').strip(fs.sep)
+            out_file_path = fs.join(output_dir, rel_path, self.get_html_name(chapter.file_name))
+
+            if not chapter.parent:
+                template = templates['index']
+            else:
+                template = templates['page']
+
+            with open(out_file_path, 'w') as out_file,\
+                 open(in_file_path, 'r') as in_file:
+                    raw_content = md.html(meta.stripped(in_file))
+                    page_html = self.render_template(template, raw_content, **chapter.meta)
+                    out_file.write(page_html)
+
+            # print(out_file_path)
+
+        for child in chapter.children:
+            self.render_chapter(child, templates)
 
     def get_template(self, path):
         """
