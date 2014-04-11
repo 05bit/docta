@@ -1,5 +1,17 @@
 /** Bootstrap + Pygments glue */
+.source {
+    border-radius: 4px;
+}
 .source pre {
     background-color: inherit;
     border: none;
 }
+
+/** Navbar brand logo */
+.navbar-brand {
+    background-repeat: no-repeat;
+    background-position: 15px center;
+}
+    .navbar-brand.logo {
+        padding-left: 0px;
+    }

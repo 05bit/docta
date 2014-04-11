@@ -24,6 +24,7 @@ class Project(object):
         self.config = config
         self.input_tree = []
         self.title = config['title']
+        self.logo = config['logo']
 
     def load(self):
         """
