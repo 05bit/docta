@@ -53,7 +53,7 @@ class Renderer(base.BaseRenderer):
 
                 with open(out_file_path, 'w') as out_file,\
                      open(in_file_path, 'r') as in_file:
-                        raw_content = md.markdown(meta.stripped(in_file))
+                        raw_content = md.html(meta.stripped(in_file))
                         page_meta = files_meta.get(name, {})
                         page_html = self.render_template(template, raw_content, **page_meta)
                         out_file.write(page_html)

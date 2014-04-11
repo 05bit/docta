@@ -48,6 +48,9 @@ def exit_with_error(message):
 
 
 def cleanup_log():
+    """
+    Cleanup error log.
+    """
     if os.path.isfile(ERROR_LOGFILE):
         os.unlink(ERROR_LOGFILE)
 

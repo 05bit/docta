@@ -7,10 +7,12 @@ __version__ = '0.0.1'
 
 install_requires=[
     'future',
-    'hoedown', # 'misaka',
+    'misaka',
+    # 'hoedown',  # seems unstable for now
     'watchdog',
     'jinja2',
-    'PyYAML'
+    'PyYAML',
+    'pygments',
     # 'docutils',
 ],
 
@@ -48,5 +50,5 @@ setup(
         'Topic :: Text Processing',
         'Topic :: Utilities'
     ],
-    use_2to3=True
+    # use_2to3=True
 )
