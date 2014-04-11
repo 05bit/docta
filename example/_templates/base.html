@@ -2,6 +2,9 @@
 <html>
 <head>
     <title>{% block meta_title %}{{ project.title }}{% endblock %}</title>
+    <link rel="icon" type="image/png" href="{{ url('favicon.png') }}" />
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 </head>
 <body>
 {% block content %}{% endblock %}

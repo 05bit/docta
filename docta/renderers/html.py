@@ -23,6 +23,7 @@ class Renderer(base.BaseRenderer):
         # Jinja
         template_loader = jinja2.FileSystemLoader(self.project.templates_dir())
         self.jinja = jinja2.Environment(loader=template_loader)
+        self.jinja.globals.update(**self.get_extra_globals())
 
     def render(self):
         out_format = self.out_format
@@ -75,6 +76,14 @@ class Renderer(base.BaseRenderer):
         else:
             bits = name.rsplit('.', 1)
         return '.'.join((bits[0], HTML_INDEX[1]))
+
+    def get_extra_globals(self):
+        base_url = self.project.config['server']['base_url'].rstrip('/')
+        assets_url = self.project.config['server']['assets_url'].rstrip('/')
+        return {
+            'url': lambda u: '/'.join((base_url, u)),
+            'asset': lambda a: '/'.join((base_url, assets_url, a)),
+        }
 
     def render_template(self, template, raw_content, **page_meta):
         """

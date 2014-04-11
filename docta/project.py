@@ -4,7 +4,6 @@ Docta projects handler.
 from __future__ import absolute_import, print_function, unicode_literals
 from future.builtins import super
 import os
-import shutil
 import docta.exceptions
 import docta.render
 import docta.utils.fs as fs
@@ -13,7 +12,6 @@ import docta.utils.meta as meta
 # Defaults
 INDEX_FILE = 'index.md'
 OUT_FORMAT_DEFAULT = 'html'
-OUT_RESOURCES_DIR = 'static'
 
 
 class Project(object):
@@ -145,6 +143,9 @@ class Project(object):
         Copy resources to output directory.
         """
         in_resources = fs.path_for_dir(self.path, self.config.get('resources', '_resources'))
-        out_resources = fs.path_for_dir(self.output_dir(out_format), OUT_RESOURCES_DIR)
-        shutil.rmtree(out_resources, ignore_errors=True)
-        shutil.copytree(in_resources, out_resources)
+        out_resources = self.output_dir(out_format)
+        for name in os.listdir(in_resources):
+            resource_src = fs.join(in_resources, name)
+            resource_dst = fs.join(out_resources, name)
+            fs.rm(resource_dst, ignore_errors=True)
+            fs.cp(resource_src, resource_dst)
