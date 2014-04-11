@@ -4,6 +4,7 @@ Docta projects handler.
 from __future__ import absolute_import, print_function, unicode_literals
 from future.builtins import super
 import os
+import docta.chapter
 import docta.exceptions
 import docta.render
 import docta.utils.fs as fs
@@ -38,8 +39,16 @@ class Project(object):
                 ...
             ]
         """
-        self.input_tree = []
+        # new style structure load
+        self.root = docta.chapter.Chapter.load_tree(self.input_dir(), self.config)
+        # DEBUG: print chapters tree
+        # def print_chapter(chapter, level=0):
+        #     print('  '*level, str(chapter))
+        #     for ch in chapter.children:
+        #         print_chapter(ch, level+1)
+        # print_chapter(self.root)
 
+        self.input_tree = []
         input_dir = self.input_dir()
         for dir_path, sub_dirs, files in os.walk(input_dir):
             files_to_render = self.files_to_render(files)
@@ -48,6 +57,8 @@ class Project(object):
                 if not self.is_relpath_masked(rel_path):
                     files_meta = self.files_meta(dir_path, files_to_render)
                     self.input_tree.append((rel_path, files_to_render, files_meta))
+        # for ch in self.input_tree:
+        #     print(ch)
 
     def build(self, formats=None):
         """
