@@ -12,7 +12,8 @@ INDEX_FILE = 'index.md'
 
 class Chapter(object):
     """
-    Chapter is a hierarchical documents data container.
+    Chapter is a data container for documents (pages), chapter are
+    organized hierarchically.
     """
     def __init__(self, config, title, nav_path, is_index=False):
         self.config = config
@@ -54,10 +55,14 @@ class Chapter(object):
 
     def get_url(self):
         base_url = self.config['server']['base_url'].rstrip('/')
-        if self.dir_path is None:
-            return '/'.join((base_url, '%s.html' % self.nav_path))
-        else:
+        if self.is_index:
             return '/'.join((base_url, self.nav_path))
+        else:
+            return '/'.join((base_url, '%s.html' % self.nav_path))
+
+    @property
+    def is_index(self):
+        return not self.dir_path is None
 
     @classmethod
     def load_tree(cls, path, config, nav_path=''):

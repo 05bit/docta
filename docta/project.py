@@ -11,7 +11,6 @@ import docta.utils.fs as fs
 import docta.utils.meta as meta
 
 # Defaults
-INDEX_FILE = docta.chapter.INDEX_FILE
 OUT_FORMAT_DEFAULT = 'html'
 
 
@@ -29,7 +28,7 @@ class Project(object):
         Load project structure.
         """
         self.tree = [docta.chapter.Chapter.load_tree(self.input_dir(), self.config)]
-        self.print_tree()
+        # self.print_tree()
 
     def build(self, formats=None):
         """
@@ -48,6 +47,12 @@ class Project(object):
         """
         raise Exception(NotImplemented)
 
+    def input_dir(self):
+        """
+        Input dir based on project index file.
+        """
+        return fs.real(fs.join(self.path, self.config.get('input', '.')))
+
     def output_dir(self, out_format=None):
         """
         Output directory for specified format.
@@ -55,19 +60,10 @@ class Project(object):
         return fs.path_for_dir(self.path, self.config['output'][out_format])
 
     def templates_dir(self):
+        """
+        Jinja templates directory.
+        """
         return fs.path_for_dir(self.path, self.config.get('templates', '_templates'))
-
-    def input_dir(self):
-        """
-        Input dir based on project index file.
-        """
-        return fs.dirname(self.index_file())
-
-    def index_file(self):
-        """
-        Get full path for main index file.
-        """
-        return fs.real(fs.join(self.path, self.config.get('index', INDEX_FILE)))
 
     def copy_resources(self, out_format=None):
         """

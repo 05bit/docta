@@ -18,7 +18,6 @@ class Renderer(base.BaseRenderer):
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.index_name = fs.basename(self.project.index_file())
 
         # Jinja
         template_loader = jinja2.FileSystemLoader(self.project.templates_dir())
@@ -56,7 +55,7 @@ class Renderer(base.BaseRenderer):
         if in_file_path:
             file_dir = fs.dirname(in_file_path)
             rel_path = file_dir.replace(input_dir, '').strip(fs.sep)
-            out_file_path = fs.join(output_dir, rel_path, self.get_html_name(chapter.file_name))
+            out_file_path = fs.join(output_dir, rel_path, self.get_html_name(chapter))
 
             if not chapter.parent:
                 template = templates['index']
@@ -80,14 +79,14 @@ class Renderer(base.BaseRenderer):
         """
         return self.jinja.get_template(path)
 
-    def get_html_name(self, name):
+    def get_html_name(self, chapter):
         """
         Get .html file name for any other source file name.
         """
-        if name == self.index_name:
+        if chapter.is_index:
             bits = (HTML_INDEX[0],)
         else:
-            bits = name.rsplit('.', 1)
+            bits = chapter.file_name.rsplit('.', 1)
         return '.'.join((bits[0], HTML_INDEX[1]))
 
     def get_extra_globals(self):

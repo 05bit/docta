@@ -4,12 +4,12 @@ Command line interface (CLI) for Docta.
 from __future__ import absolute_import, print_function, unicode_literals
 from future.builtins import super
 import argparse
-import json
 import os
 import os.path
 import sys
 import docta.project
 import docta.utils.server
+import docta.utils.json as json
 
 CONFIG_FILE = 'docta.conf'
 OK_CODE = 0
