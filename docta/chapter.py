@@ -27,6 +27,15 @@ class Chapter(object):
     def __str__(self):
         return '%s (%s)' % (self.title, self.nav_path)
 
+    def __eq__(self, other):
+        if other:
+            return self.nav_path == other.nav_path
+        else:
+            return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
     def load(self, file_path):
         """
         Load meta from file.

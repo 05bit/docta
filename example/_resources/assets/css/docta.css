@@ -15,3 +15,21 @@
     .navbar-brand.logo {
         padding-left: 0px;
     }
+
+/** Sidebar tweaks */
+.nav-tree.nav>li>a {
+    font-weight: bold;
+}
+.nav-tree.nav li {
+    list-style: none;
+}
+    .nav-tree.nav li>a {
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    .nav-tree.nav li>hr {
+        margin: 5px 0px;
+    }
+    .nav-tree.nav li li {
+        margin-left: 15px;
+    }
