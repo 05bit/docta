@@ -15,6 +15,7 @@ def stripped(stream):
     meta_started = False
     meta_ended = False
 
+    # TODO: cleaner implementation?
     for next_line in stream:
         if meta_ended:  # done with meta, collecting data
             data.append(next_line)
@@ -26,6 +27,7 @@ def stripped(stream):
                     meta_ended = True
             else:  # meta not found at all
                 if not meta_started:
+                    data.append(next_line)  # don't lose first line
                     meta_ended = True
 
     # TODO: Avoid double memory use? Oh yes, I'm aware

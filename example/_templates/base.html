@@ -33,18 +33,18 @@
                 <div class="panel-body">
                     <ul class="nav nav-pills nav-stacked nav-tree">
                         <li class="top {% if top == chapter %} active{% endif %}">
-                            <a href="{{ top.get_url() }}">{{ top.title }}</a>
-                            <hr>
+                            <a href="{{ chapter_url(top) }}">{{ top.title }}</a>
+                            {% if top.children %}<hr>{% endif %}
                         </li>
                         {% if top.children %}
                             {% for ch1 in top.children %}
                             <li {% if ch1 == chapter %}class="active"{% endif %}>
-                                <a href="{{ ch1.get_url() }}">{{ ch1.title }}</a>
+                                <a href="{{ chapter_url(ch1) }}">{{ ch1.title }}</a>
                                 {% if ch1.children %}
                                 <ul class="nav nav-pills nav-stacked">
                                     {% for ch2 in ch1.children %}
                                     <li {% if ch2 == chapter %}class="active"{% endif %}>
-                                        <a href="{{ ch2.get_url() }}">{{ ch2.title }}</a>
+                                        <a href="{{ chapter_url(ch2) }}">{{ ch2.title }}</a>
                                     </li>
                                     {% endfor %}
                                 </ul>

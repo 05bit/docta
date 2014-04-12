@@ -27,8 +27,18 @@ class Project(object):
         """
         Load project structure.
         """
-        self.tree = [docta.chapter.Chapter.load_tree(self.input_dir(), self.config)]
-        # self.print_tree()
+        self.tree = []
+
+        load_tree = docta.chapter.Chapter.load_tree  # shortcut
+        for chapter_config in self.config.get('chapters', []):
+            config = self.config.copy()
+            config.update(chapter_config)
+            # print("Chapter config: %s" % config)
+
+            chapter = load_tree(self.input_dir(config),
+                                config, nav_path=config.get('base_path', ''))
+            self.tree.append(chapter)
+            # self.print_tree(self.tree[-1])
 
     def build(self, formats=None):
         """
@@ -47,11 +57,11 @@ class Project(object):
         """
         raise Exception(NotImplemented)
 
-    def input_dir(self):
+    def input_dir(self, config):
         """
-        Input dir based on project index file.
+        Full input dir path for specified config.
         """
-        return fs.real(fs.join(self.path, self.config.get('input', '.')))
+        return fs.real(fs.join(self.path, config.get('input', '.')))
 
     def output_dir(self, out_format=None):
         """
@@ -77,7 +87,7 @@ class Project(object):
             fs.rm(resource_dst, ignore_errors=True)
             fs.cp(resource_src, resource_dst)
 
-    def print_tree(self):
+    def print_tree(self, root):
         """
         DEBUG: print chapters tree
         """
@@ -85,5 +95,5 @@ class Project(object):
             print('  '*level, str(chapter))
             for ch in chapter.children:
                 print_chapter(ch, level+1)
-        print_chapter(self.tree[0])
+        print_chapter(root)
 

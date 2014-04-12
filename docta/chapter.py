@@ -19,7 +19,8 @@ class Chapter(object):
         self.config = config
         self.title = title
         self.nav_path = nav_path
-        self.dir_path = nav_path.replace('/', fs.sep) if is_index else None
+        self.is_index = is_index
+        self.rel_dir_path = nav_path.replace('/', fs.sep) if is_index else None
         self.file_path = None
         self.meta = {}
         self.parent = None
@@ -52,17 +53,8 @@ class Chapter(object):
     def add_child(self, child):
         self.children.append(child)
         child.parent = self
-
-    def get_url(self):
-        base_url = self.config['server']['base_url'].rstrip('/')
-        if self.is_index:
-            return '/'.join((base_url, self.nav_path))
-        else:
-            return '/'.join((base_url, '%s.html' % self.nav_path))
-
-    @property
-    def is_index(self):
-        return not self.dir_path is None
+        if not child.is_index:
+            child.rel_dir_path = self.rel_dir_path
 
     @classmethod
     def load_tree(cls, path, config, nav_path=''):
@@ -88,14 +80,17 @@ class Chapter(object):
         if not files and not dirs:
             return
 
-        # create index chapter
+        # no index = no data
         index_name = config.get('index', INDEX_FILE)
+        if not index_name in files:
+            return
+
+        # create index chapter
         index_title = fs.basename(path).capitalize()
         chapter = cls(config, title=index_title,
                       nav_path=nav_path, is_index=True)
-        if index_name in files:
-            files.remove(index_name)
-            chapter.load(file_path=fs.join(path, index_name))
+        chapter.load(file_path=fs.join(path, index_name))
+        files.remove(index_name)
 
         # create children
         for name in files:
@@ -136,7 +131,7 @@ class Chapter(object):
         """
         Checks if file/dir name is masked.
         """
-        return name.startswith('_')
+        return name.startswith('_') or name.startswith('.')
 
     @classmethod
     def is_file_to_render(self, name):

@@ -22,7 +22,7 @@ class Renderer(base.BaseRenderer):
         # Jinja
         template_loader = jinja2.FileSystemLoader(self.project.templates_dir())
         self.jinja = jinja2.Environment(loader=template_loader)
-        self.jinja.globals.update(**self.get_extra_globals())
+        self.jinja.globals.update(**self.template_globals())
 
     def render(self):
         out_format = self.out_format
@@ -43,19 +43,17 @@ class Renderer(base.BaseRenderer):
     def render_chapter(self, chapter, templates):
         # print("Render: %s" % str(chapter))
         output_dir = self.project.output_dir(self.out_format)
-        input_dir = self.project.input_dir()
         in_file_path = chapter.file_path
 
         # dir for index
-        if chapter.dir_path:
-            # print(fs.path_for_dir(output_dir, chapter.dir_path))
-            fs.mkdirs(fs.path_for_dir(output_dir, chapter.dir_path))
+        if chapter.is_index:
+            # print(fs.path_for_dir(output_dir, chapter.rel_dir_path))
+            fs.mkdirs(fs.path_for_dir(output_dir, chapter.rel_dir_path))
 
         # render file
         if in_file_path:
-            file_dir = fs.dirname(in_file_path)
-            rel_path = file_dir.replace(input_dir, '').strip(fs.sep)
-            out_file_path = fs.join(output_dir, rel_path, self.get_html_name(chapter))
+            out_file_path = fs.join(output_dir, chapter.rel_dir_path,
+                                    self.get_html_name(chapter))
 
             if not chapter.parent:
                 template = templates['index']
@@ -81,7 +79,7 @@ class Renderer(base.BaseRenderer):
 
     def get_html_name(self, chapter):
         """
-        Get .html file name for any other source file name.
+        Get .html file name chapter.
         """
         if chapter.is_index:
             bits = (HTML_INDEX[0],)
@@ -89,12 +87,23 @@ class Renderer(base.BaseRenderer):
             bits = chapter.file_name.rsplit('.', 1)
         return '.'.join((bits[0], HTML_INDEX[1]))
 
-    def get_extra_globals(self):
+    def get_url(self, chapter):
+        """
+        Get URL for chapter.
+        """
+        base_url = chapter.config['server']['base_url'].rstrip('/')
+        if chapter.is_index:
+            return '/'.join((base_url, chapter.nav_path))
+        else:
+            return '/'.join((base_url, '%s.%s' % (chapter.nav_path, HTML_INDEX[1])))
+
+    def template_globals(self):
         base_url = self.project.config['server']['base_url'].rstrip('/')
         assets_url = self.project.config['server']['assets_url'].rstrip('/')
         return {
             'url': lambda u: '/'.join((base_url, u)),
             'asset': lambda a: '/'.join((base_url, assets_url, a)),
+            'chapter_url': lambda chapter: self.get_url(chapter)
         }
 
     def render_template(self, template, raw_content, chapter):
