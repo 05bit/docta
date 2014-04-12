@@ -33,3 +33,9 @@
     .nav-tree.nav li li {
         margin-left: 15px;
     }
+
+/** Footer */
+.footer .text-muted a {
+    color: inherit;
+    text-decoration: underline;
+}

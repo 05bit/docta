@@ -60,8 +60,11 @@
     </div>
 </div>
 
-<div class="container">
-    {% block footer %}{% endblock %}
+<div class="container footer">
+    {% block footer %}
+    <hr>
+    <p class="text-muted">{{ project.copyright }}</p>
+    {% endblock %}
 </div>
 </body>
 </html>

@@ -103,7 +103,12 @@ class Renderer(base.BaseRenderer):
         Render specified template with project and page data.
         """
         context = {
-            'project': self.project,
+            'project': {
+                'title': self.project.config['title'],
+                'logo': self.project.config['logo'],
+                'copyright': self.project.config['copyright'],
+                'tree': self.project.tree,
+            },
             'page': {
                 'html': raw_content,
             },

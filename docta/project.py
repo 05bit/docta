@@ -23,8 +23,6 @@ class Project(object):
     def __init__(self, path, **config):
         self.path = path
         self.config = config
-        self.title = config['title']
-        self.logo = config['logo']
 
     def load(self):
         """
