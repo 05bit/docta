@@ -66,7 +66,7 @@ class Renderer(base.BaseRenderer):
             with open(out_file_path, 'w') as out_file,\
                  open(in_file_path, 'r') as in_file:
                     raw_content = md.html(meta.stripped(in_file))
-                    page_html = self.render_template(template, raw_content, **chapter.meta)
+                    page_html = self.render_template(template, raw_content, chapter)
                     out_file.write(page_html)
 
             # print(out_file_path)
@@ -98,7 +98,7 @@ class Renderer(base.BaseRenderer):
             'asset': lambda a: '/'.join((base_url, assets_url, a)),
         }
 
-    def render_template(self, template, raw_content, **page_meta):
+    def render_template(self, template, raw_content, chapter):
         """
         Render specified template with project and page data.
         """
@@ -106,7 +106,7 @@ class Renderer(base.BaseRenderer):
             'project': self.project,
             'page': {
                 'html': raw_content,
-            }
+            },
+            'chapter': chapter,
         }
-        context['page'].update(page_meta)
         return template.render(**context)

@@ -31,7 +31,7 @@ class Project(object):
         Load project structure.
         """
         self.tree = [docta.chapter.Chapter.load_tree(self.input_dir(), self.config)]
-        # self.print_tree()
+        self.print_tree()
 
     def build(self, formats=None):
         """

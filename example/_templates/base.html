@@ -28,25 +28,36 @@
             {% block content %}{% endblock %}
         </div>
         <div class="col-lg-3 contents">
+            {% for top in project.tree %}
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Panel title</h3>
+                    <h3 class="panel-title">{{ top.title }}</h3>
                 </div>
                 <div class="panel-body">
+                    {% if top.nav_path != chapter.nav_path %}
+                        <a href="{{ top.get_url() }}">&uarr; return</a>
+                    {% endif %}
+                    {% if top.children %}
                     <ol class="nav nav-pills nav-stacked">
-                        <li class="active">
-                            <a href="">asfdsdf</a>
+                        {% for ch1 in top.children %}
+                        <li>
+                            <a href="{{ ch1.get_url() }}">{{ ch1.title }}</a>
+                            {% if ch1.children %}
                             <ol>
-                                <li><a href="">vsvsdfv</a></li>
-                                <li><a href="">zzzz</a></li>
+                                {% for ch2 in ch1.children %}
+                                <li>
+                                    <a href="{{ ch2.get_url() }}">{{ ch2.title }}</a>
+                                </li>
+                                {% endfor %}
                             </ol>
-                    </li>
-                    <li><a href="">vvvv</a></li>
+                            {% endif %}            
+                        </li>
+                        {% endfor %}
                     </ol>
-
-                    {# project.input_tree #}
+                    {% endif %}
                 </div>
             </div>
+            {% endfor %}
         </div>
     </div>
 </div>
