@@ -23,9 +23,10 @@ def mkdirs(path):
 
 
 def rm(path, ignore_errors=False):
+    """Remove files and directories recursivelly."""
     if isdir(path):
         shutil.rmtree(path, ignore_errors=ignore_errors)
-    else:
+    elif isfile(path):
         try:
             os.unlink(path)
         except (OSError, IOError) as e:
@@ -33,25 +34,22 @@ def rm(path, ignore_errors=False):
                 raise e
 
 
-def cp(src, dst, overwrite=False, _listcopy=False):
-    """Copy files or directories recursively."""
-    # top-dir to existing top-dir
-    if not _listcopy:
-        if isdir(src) and isdir(dst):
-            for name in os.listdir(src):
-                cp(join(src, name), join(dst, name),
-                   overwrite=overwrite, _listcopy=True)
-            return
-    
-    # overwrite
-    if overwrite:
+def cp(src, dst, overwrite=False):
+    """Copy files and directories recursively."""
+    # overwrite file-to-any and dir-to-file
+    if overwrite and (isfile(src) or (isdir(src) and isfile(dst))):
         rm(dst, ignore_errors=True)
 
-    # now copy!
-    if isdir(src):
-        shutil.copytree(src, dst)
-    elif isfile(src):
+    # file-to-...
+    if isfile(src):
+        dst_dir = dirname(dst)
+        if not isdir(dst_dir):
+            mkdirs(dst_dir)
         shutil.copy2(src, dst)
+    # dir-to-...
+    elif isdir(src):
+        for name in os.listdir(src):
+            cp(join(src, name), join(dst, name), overwrite=overwrite)
 
 
 def path_for_file(base, relative):
