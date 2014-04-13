@@ -65,7 +65,7 @@ class Renderer(base.BaseRenderer):
                 template = self.get_template('page.html')
 
             with open(out_file_path, 'w') as out_file:
-                context = self.get_context(chapter)
+                context = self.template_context(chapter)
                 html = template.render(**context)
                 out_file.write(html)
         
@@ -83,7 +83,7 @@ class Renderer(base.BaseRenderer):
 
     def get_html_name(self, chapter):
         """
-        Get .html file name chapter.
+        Get .html file name for chapter.
         """
         if chapter.is_index:
             bits = (HTML_INDEX[0],)
@@ -101,17 +101,28 @@ class Renderer(base.BaseRenderer):
         else:
             return '/'.join((base_url, '%s.%s' % (chapter.nav_path, HTML_INDEX[1])))
 
+    def get_main_menu(self):
+        """
+        Main menu config.
+        """
+        config = self.project.config['output'][self.out_format]
+        return config.get('main_menu', [])
+
     def template_globals(self):
         base_url = self.project.config['server']['base_url'].rstrip('/')
         assets_url = self.project.config['server']['assets_url'].rstrip('/')
+        url_external = lambda u: '://' in u
+        url_abs = lambda u: u.startswith('/')
+        url = lambda u: (url_external(u) or url_abs(u)) and u or '/'.join((base_url, u))
         return {
-            'url': lambda u: '/'.join((base_url, u)),
             'asset': lambda a: '/'.join((base_url, assets_url, a)),
             'chapter_url': lambda chapter: self.get_url(chapter),
-            'markdown': lambda text: md.html(text)
+            'markdown': lambda text: md.html(text),
+            'url': url,
+            'url_external': url_external,
         }
 
-    def get_context(self, chapter):
+    def template_context(self, chapter):
         """
         Template context for chapter.
         """
@@ -121,6 +132,7 @@ class Renderer(base.BaseRenderer):
                 'logo': self.project.config['logo'],
                 'copyright': self.project.config['copyright'],
                 'tree': self.project.tree,
+                'main_menu': self.get_main_menu(),
             },
             'chapter': chapter,
         }

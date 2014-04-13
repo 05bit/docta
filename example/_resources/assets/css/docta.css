@@ -16,7 +16,20 @@
         padding-left: 0px;
     }
 
-/** Sidebar tweaks */
+/** Navbar top links */
+.navbar-default .navbar-nav>li.active>a,
+.navbar-default .navbar-nav>li.active>a:hover {
+    background-color: #ffffff;
+    border-top: 3px solid #428bca;
+    padding-top: 12px;    
+}
+.navbar-default .navbar-nav>li>a:hover {
+    color: #2a6496;
+    border-top: 3px solid #428bca;
+    padding-top: 12px;    
+}
+
+/** Sidebar */
 .nav-tree.nav>li>a {
     font-weight: bold;
 }

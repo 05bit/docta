@@ -18,6 +18,18 @@
             {% endif %}
             <a class="navbar-brand" href="{{ url('') }}">{{ project.title }}</a>
         </div>
+
+        {% if project.main_menu %}
+        <div class="navbar-left" role="navigation">
+            <ul class="nav navbar-nav">
+                {% for item in project.main_menu %}
+                <li {% if chapter_url(chapter).lstrip('/') == item.url.lstrip('/') %} class="active"{% endif %}>
+                    <a href="{{ url(item.url) }}" {% if url_external(item.url) %}target="_blank"{% endif %}>{{ item.title }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
     </div>
 </nav>
 {% endblock %}
