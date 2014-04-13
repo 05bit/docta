@@ -30,7 +30,7 @@
 }
 
 /** Sidebar */
-.nav-tree.nav>li>a {
+.nav-tree.nav>li>a.index {
     font-weight: bold;
 }
 .nav-tree.nav li {

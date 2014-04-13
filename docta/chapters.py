@@ -6,16 +6,13 @@ import os
 import docta.utils.fs as fs
 import docta.utils.meta as meta
 
-# Defaults
-INDEX_FILE = 'index.md'
-
 
 def load_tree(path, config, nav_path=''):
     """
     Load chapters tree. Only Markdown text based chapters
     handled at the moment.
     """
-    return TextChapter.load_tree(path, config, nav_path)
+    return TextChapter.load_tree(path, config, nav_path=nav_path)
 
 
 class BaseChapter():
@@ -90,7 +87,7 @@ class BaseChapter():
         raise Exception(NotImplemented)
 
     @classmethod
-    def load_tree(cls, path, config, nav_path=''):
+    def load_tree(cls, path, config, nav_path='', parent=None):
         """
         Load chapters tree.
         """
@@ -133,6 +130,8 @@ class TextChapter(BaseChapter):
     """
     Chapter for text documents formatted with YAML + Markdown.
     """
+    INDEX_FILE = 'index.md'
+
     def load_content(self):
         """
         Load content. Meta have to be loaded before loading content!
@@ -151,14 +150,15 @@ class TextChapter(BaseChapter):
         return {}
 
     @classmethod
-    def load_tree(cls, path, config, nav_path=''):
+    def load_tree(cls, path, config, nav_path='', parent=None):
         """
         Load chapters tree recursivelly.
         """
+        index_name = config.get('index', cls.INDEX_FILE)
+        files, dirs = [], []
         # print ("Load tree: %s, %s" % (path, config))
         
         # scan sub-dirs and files
-        files, dirs = [], []
         for name in os.listdir(path):
             full_path = fs.join(path, name)
             # dirs
@@ -170,41 +170,53 @@ class TextChapter(BaseChapter):
                 if cls.is_file_to_render(name):
                     files.append(name)
 
-        # empty chapter
-        if not files and not dirs:
-            return
-
-        # no index = no data
-        index_name = config.get('index', INDEX_FILE)
+        # no index = no data here, but don't give up, try scan deeper!
         if not index_name in files:
+            cls.load_subdirs(dirs, config, nav_path=nav_path, parent=parent)
             return
 
-        # create index chapter
-        index_title = fs.basename(path).capitalize()
-        chapter = cls(config, title=index_title,
-                      nav_path=nav_path, is_index=True)
+        # index found = create chapter!
+        initial_title = fs.basename(path).capitalize()
+        chapter = cls(config, title=initial_title, nav_path=nav_path, is_index=True)
         chapter.load_meta(file_path=fs.join(path, index_name))
         files.remove(index_name)
 
-        # create children
+        # add to parent
+        if parent:
+            parent.add_child(chapter)
+
+        # load files
+        cls.load_files(path, files, config, nav_path=nav_path, parent=chapter)
+
+        # load dirs
+        cls.load_subdirs(dirs, config, nav_path=nav_path, parent=chapter)
+
+        # print ("chapter: %s, files: %s, dirs: %s" % (str(chapter), files, dirs))
+        return chapter
+
+    @classmethod
+    def load_files(cls, base_path, files, config, nav_path='', parent=None):
+        """
+        Helper for loading chapters from files.
+        """
         for name in files:
-            file_path = fs.join(path, name)
+            file_path = fs.join(base_path, name)
             file_slug = cls.slug_by_name(name)
             file_nav_path = nav_path and '/'.join((nav_path, file_slug)) or file_slug
             child = cls(config, title=file_slug.capitalize(),
                         nav_path=file_nav_path, is_index=False)
             child.load_meta(file_path)
-            chapter.add_child(child)
+            parent.add_child(child)
 
+    @classmethod
+    def load_subdirs(cls, dirs, config, nav_path='', parent=None):
+        """
+        Helper for loading chapters from sub dirs.
+        """
         for dir_path in dirs:
             dir_slug = fs.basename(dir_path)
             dir_nav_path = nav_path and '/'.join((nav_path, dir_slug)) or dir_slug
-            child = cls.load_tree(dir_path, config, nav_path=dir_nav_path)
-            if child:
-                chapter.add_child(child)
-
-        # print ("chapter: %s, files: %s, dirs: %s" % (str(chapter), files, dirs))
-        return chapter
+            cls.load_tree(dir_path, config, nav_path=dir_nav_path, parent=parent)
 
     @classmethod
     def is_file_to_render(self, name):
