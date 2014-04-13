@@ -45,9 +45,9 @@ class Renderer(base.BaseRenderer):
         output_dir = self.project.output_dir(self.out_format)
 
         # dir for index
-        if chapter.is_index:
-            # print(fs.path_for_dir(output_dir, chapter.rel_dir_path))
-            fs.mkdirs(fs.path_for_dir(output_dir, chapter.rel_dir_path))
+        # if chapter.is_index:
+        #     # print(fs.path_for_dir(output_dir, chapter.rel_dir_path))
+        #     fs.mkdirs(fs.path_for_dir(output_dir, chapter.rel_dir_path))
 
         # load content - render - flush content
         chapter.load_content()
@@ -55,6 +55,7 @@ class Renderer(base.BaseRenderer):
         if not chapter.content is None:
             out_file_path = fs.join(output_dir, chapter.rel_dir_path,
                                     self.get_html_name(chapter))
+            fs.mkdirs(fs.dirname(out_file_path))
             # print(out_file_path)
 
             if home:
@@ -86,20 +87,25 @@ class Renderer(base.BaseRenderer):
         Get .html file name for chapter.
         """
         if chapter.is_index:
-            bits = (HTML_INDEX[0],)
+            return 'index.html'
         else:
-            bits = chapter.file_name.rsplit('.', 1)
-        return '.'.join((bits[0], HTML_INDEX[1]))
+            parts = chapter.file_name.rsplit('.', 1)
+            return fs.sep.join((parts[0], 'index.html'))
+        # if chapter.is_index:
+        #     bits = (HTML_INDEX[0],)
+        # else:
+        #     bits = chapter.file_name.rsplit('.', 1)
+        # return '.'.join((bits[0], HTML_INDEX[1]))
 
     def get_url(self, chapter):
         """
         Get URL for chapter.
         """
-        base_url = chapter.config['server']['base_url'].rstrip('/')
-        if chapter.is_index:
-            return '/'.join((base_url, chapter.nav_path))
+        base_url = chapter.config['server']['base_url']
+        if chapter.nav_path:
+            return '/'.join((base_url.rstrip('/'), chapter.nav_path, ''))
         else:
-            return '/'.join((base_url, '%s.%s' % (chapter.nav_path, HTML_INDEX[1])))
+            return base_url
 
     def get_main_menu(self):
         """
