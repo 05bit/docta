@@ -54,7 +54,7 @@ class BaseChapter():
         """
         Load meta and update base chapter info.
         """
-        self.meta = self.extract_meta(in_file)
+        self.meta = self.extract_meta(file_path)
         self.file_path = file_path
         self.file_name = fs.basename(file_path)
         self.title = self.meta.get('title', self.title)
@@ -83,7 +83,7 @@ class BaseChapter():
             child.rel_dir_path = self.rel_dir_path
 
     @classmethod
-    def extract_meta(cls, in_file):
+    def extract_meta(cls, file_path):
         """
         Extract meta from file.
         """
@@ -133,18 +133,6 @@ class TextChapter(BaseChapter):
     """
     Chapter for text documents formatted with YAML + Markdown.
     """
-    def load_meta(self, file_path):
-        """
-        Load meta from file.
-        """
-        with open(file_path, 'r') as in_file:
-            self.meta = meta.extract(in_file)
-
-        self.file_path = file_path
-        self.file_name = fs.basename(file_path)
-        self.title = self.meta.get('title', self.title)
-        self.sorting = self.meta.get('sorting', self.title)
-
     def load_content(self):
         """
         Load content. Meta have to be loaded before loading content!
@@ -154,7 +142,7 @@ class TextChapter(BaseChapter):
                 self.content = meta.stripped(in_file)
 
     @classmethod
-    def extract_meta(cls, in_file):
+    def extract_meta(cls, file_path):
         """
         Extract meta from YAML file header.
         """
