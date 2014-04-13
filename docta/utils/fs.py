@@ -33,7 +33,21 @@ def rm(path, ignore_errors=False):
                 raise e
 
 
-def cp(src, dst):
+def cp(src, dst, overwrite=False, _listcopy=False):
+    """Copy files or directories recursively."""
+    # top-dir to existing top-dir
+    if not _listcopy:
+        if isdir(src) and isdir(dst):
+            for name in os.listdir(src):
+                cp(join(src, name), join(dst, name),
+                   overwrite=overwrite, _listcopy=True)
+            return
+    
+    # overwrite
+    if overwrite:
+        rm(dst, ignore_errors=True)
+
+    # now copy!
     if isdir(src):
         shutil.copytree(src, dst)
     elif isfile(src):

@@ -86,11 +86,7 @@ class Project(object):
         """
         in_resources = fs.path_for_dir(self.path, self.config.get('resources', '_resources'))
         out_resources = self.output_dir(out_format)
-        for name in os.listdir(in_resources):
-            resource_src = fs.join(in_resources, name)
-            resource_dst = fs.join(out_resources, name)
-            fs.rm(resource_dst, ignore_errors=True)
-            fs.cp(resource_src, resource_dst)
+        fs.cp(in_resources, out_resources, overwrite=True)
 
     def print_tree(self, root):
         """
