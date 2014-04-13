@@ -1,6 +1,8 @@
 Before v0.1
 ===========
 
+* Smarter scanning - look for index files in depth
+* Top menu config
 * `init` command
 * Basic docs
 

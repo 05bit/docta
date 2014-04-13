@@ -32,44 +32,48 @@ class Renderer(base.BaseRenderer):
         fs.mkdirs(output_dir)
 
         # Render chapters
+        home = True
         for chapter in self.project.tree:
-            self.render_chapter(chapter, {
-                    'index': self.get_template('index.html'),
-                    'page': self.get_template('page.html')})
+            self.render_chapter(chapter, home=home)
+            home = False  # only the first root chapter is 'home'
 
         # Copy resources
         self.project.copy_resources(out_format)
 
-    def render_chapter(self, chapter, templates):
+    def render_chapter(self, chapter, home=False):
         # print("Render: %s" % str(chapter))
         output_dir = self.project.output_dir(self.out_format)
-        in_file_path = chapter.file_path
 
         # dir for index
         if chapter.is_index:
             # print(fs.path_for_dir(output_dir, chapter.rel_dir_path))
             fs.mkdirs(fs.path_for_dir(output_dir, chapter.rel_dir_path))
 
-        # render file
-        if in_file_path:
+        # load content - render - flush content
+        chapter.load_content()
+
+        if not chapter.content is None:
             out_file_path = fs.join(output_dir, chapter.rel_dir_path,
                                     self.get_html_name(chapter))
-
-            if not chapter.parent:
-                template = templates['index']
-            else:
-                template = templates['page']
-
-            with open(out_file_path, 'w') as out_file,\
-                 open(in_file_path, 'r') as in_file:
-                    raw_content = md.html(meta.stripped(in_file))
-                    page_html = self.render_template(template, raw_content, chapter)
-                    out_file.write(page_html)
-
             # print(out_file_path)
 
+            if home:
+                template = self.get_template('home.html')
+            elif chapter.is_index:
+                template = self.get_template('index.html')
+            else:
+                template = self.get_template('page.html')
+
+            with open(out_file_path, 'w') as out_file:
+                context = self.get_context(chapter)
+                html = template.render(**context)
+                out_file.write(html)
+        
+        chapter.flush_content()
+
+        # render children
         for child in chapter.children:
-            self.render_chapter(child, templates)
+            self.render_chapter(child)
 
     def get_template(self, path):
         """
@@ -103,12 +107,13 @@ class Renderer(base.BaseRenderer):
         return {
             'url': lambda u: '/'.join((base_url, u)),
             'asset': lambda a: '/'.join((base_url, assets_url, a)),
-            'chapter_url': lambda chapter: self.get_url(chapter)
+            'chapter_url': lambda chapter: self.get_url(chapter),
+            'markdown': lambda text: md.html(text)
         }
 
-    def render_template(self, template, raw_content, chapter):
+    def get_context(self, chapter):
         """
-        Render specified template with project and page data.
+        Template context for chapter.
         """
         context = {
             'project': {
@@ -117,9 +122,6 @@ class Renderer(base.BaseRenderer):
                 'copyright': self.project.config['copyright'],
                 'tree': self.project.tree,
             },
-            'page': {
-                'html': raw_content,
-            },
             'chapter': chapter,
         }
-        return template.render(**context)
+        return context

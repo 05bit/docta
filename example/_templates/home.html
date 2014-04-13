@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <p>This is a {{ project.title }}.</p>
+
+    / {{ chapter.title }}
+
     {{ markdown(chapter.content) }}
 {% endblock %}

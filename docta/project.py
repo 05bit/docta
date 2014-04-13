@@ -36,7 +36,7 @@ class Project(object):
             # print("Chapter config: %s" % config)
 
             chapter = load_tree(self.input_dir(config),
-                                config, nav_path=config.get('base_path', ''))
+                                config, nav_path=config.get('base_nav_path', ''))
             self.tree.append(chapter)
             # self.print_tree(self.tree[-1])
 
@@ -61,13 +61,18 @@ class Project(object):
         """
         Full input dir path for specified config.
         """
-        return fs.real(fs.join(self.path, config.get('input', '.')))
+        return fs.real(fs.join(self.path, config.get('input_path', '.')))
 
     def output_dir(self, out_format=None):
         """
         Output directory for specified format.
         """
-        return fs.path_for_dir(self.path, self.config['output'][out_format])
+        output = self.config['output'][out_format]
+        if isinstance(output, dict):
+            output_rel_path = output.get('build_path', out_format)
+        else:
+            output_rel_path = output
+        return fs.path_for_dir(self.path, output_rel_path)
 
     def templates_dir(self):
         """

@@ -16,15 +16,20 @@ class Chapter(object):
     organized hierarchically.
     """
     def __init__(self, config, title, nav_path, is_index=False):
+        # config
         self.config = config
+        self.file_path = None
+        # data
+        self.content = None
         self.title = title
+        self.meta = {}
+        # structure
+        self.parent = None
+        self.children = []
+        # navigation
         self.nav_path = nav_path
         self.is_index = is_index
         self.rel_dir_path = nav_path.replace('/', fs.sep) if is_index else None
-        self.file_path = None
-        self.meta = {}
-        self.parent = None
-        self.children = []
 
     def __str__(self):
         return '%s (%s)' % (self.title, self.nav_path)
@@ -38,7 +43,7 @@ class Chapter(object):
     def __ne__(self, other):
         return not self.__eq__(other)
 
-    def load(self, file_path):
+    def load_meta(self, file_path):
         """
         Load meta from file.
         """
@@ -49,6 +54,21 @@ class Chapter(object):
         self.file_name = fs.basename(file_path)
         self.title = self.meta.get('title', self.title)
         self.sorting = self.meta.get('sorting', self.title)
+
+    def load_content(self):
+        """
+        Load content. Meta have to be loaded before loading content!
+        """
+        if self.file_path:
+            with open(self.file_path, 'r') as in_file:
+                self.content = meta.stripped(in_file)
+
+    def flush_content(self):
+        """
+        Flush chapter content. We're going to do load-render-flush on every
+        chaper render so we won't store whole chapters data in memory.
+        """
+        self.content = None
 
     def add_child(self, child):
         self.children.append(child)
@@ -89,7 +109,7 @@ class Chapter(object):
         index_title = fs.basename(path).capitalize()
         chapter = cls(config, title=index_title,
                       nav_path=nav_path, is_index=True)
-        chapter.load(file_path=fs.join(path, index_name))
+        chapter.load_meta(file_path=fs.join(path, index_name))
         files.remove(index_name)
 
         # create children
@@ -99,7 +119,7 @@ class Chapter(object):
             file_nav_path = nav_path and '/'.join((nav_path, file_slug)) or file_slug
             child = cls(config, title=file_slug.capitalize(),
                         nav_path=file_nav_path, is_index=False)
-            child.load(file_path)
+            child.load_meta(file_path)
             chapter.add_child(child)
 
         for dir_path in dirs:
