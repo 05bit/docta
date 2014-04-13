@@ -4,7 +4,7 @@ Docta projects handler.
 from __future__ import absolute_import, print_function, unicode_literals
 from future.builtins import super
 import os
-import docta.chapter
+import docta.chapters
 import docta.exceptions
 import docta.render
 import docta.utils.fs as fs
@@ -35,7 +35,7 @@ class Project(object):
             # print("Chapter config: %s" % config)
 
             nav_path = config.get('base_nav_path', '')
-            chapter = docta.chapter.load_tree(self.input_dir(config),
+            chapter = docta.chapters.load_tree(self.input_dir(config),
                                               config, nav_path=nav_path)
             self.tree.append(chapter)
             # self.print_tree(self.tree[-1])
