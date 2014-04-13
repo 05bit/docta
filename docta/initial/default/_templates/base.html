@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block meta_title %}{{ project.title }}{% endblock %}</title>
+    <link rel="icon" type="image/png" href="{{ url('favicon.png') }}" />
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/pygments.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/docta.css') }}">
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+</head>
+<body>
+{% block header %}
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            {% if project.logo %}
+            <a class="navbar-brand logo" href="{{ url('') }}" style="background-image: url({{ asset(project.logo) }}); width: 55px;"></a>
+            {% endif %}
+            <a class="navbar-brand" href="{{ url('') }}">{{ project.title }}</a>
+        </div>
+
+        {% if project.main_menu %}
+        <div class="navbar-left" role="navigation">
+            <ul class="nav navbar-nav">
+                {% for item in project.main_menu %}
+                <li {% if chapter_url(chapter).lstrip('/') == item.url.lstrip('/') %} class="active"{% endif %}>
+                    <a href="{{ url(item.url) }}" {% if url_external(item.url) %}target="_blank"{% endif %}>{{ item.title }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</nav>
+{% endblock %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-9">
+            {% block content %}{% endblock %}
+        </div>
+        <div class="col-lg-3">
+            {% for top in project.tree %}
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <ul class="nav nav-pills nav-stacked nav-tree">
+                        <li {% if top == chapter %}class="active"{% endif %}>
+                            <a href="{{ chapter_url(top) }}" class="index">{{ top.title }}</a>
+                            {% if top.children %}<hr>{% endif %}
+                        </li>
+                        {% if top.children %}
+                            {% for ch1 in top.children %}
+                            <li {% if ch1 == chapter %}class="active"{% endif %}>
+                                <a href="{{ chapter_url(ch1) }}" {% if ch1.is_index and ch1.children %}class="index"{% endif %}>{{ ch1.title }}</a>
+                                {% if ch1.children %}
+                                <ul class="nav nav-pills nav-stacked">
+                                    {% for ch2 in ch1.children %}
+                                    <li {% if ch2 == chapter %}class="active"{% endif %}>
+                                        <a href="{{ chapter_url(ch2) }}">{{ ch2.title }}</a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}            
+                            </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="container footer">
+    {% block footer %}
+    <hr>
+    <p class="text-muted">{{ project.copyright }}</p>
+    {% endblock %}
+</div>
+</body>
+</html>

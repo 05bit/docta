@@ -19,7 +19,7 @@ isdir = os.path.isdir
 def mkdirs(path):
     """Creates dirs recursivelly with permissions mask 0755 +
     ignores OSError and IOError errors."""
-    return os.makedirs(path, mode=0755)
+    return os.makedirs(path, mode=0o755)
 
 
 def rm(path, ignore_errors=False):

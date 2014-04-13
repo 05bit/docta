@@ -10,6 +10,8 @@ import json
 def load(stream):
     data = []
     for line in stream:
-        if not line.strip().startswith('//'):
+        if line.strip().startswith('//'):
+            data.append('\n')
+        else:
             data.append(line)
     return json.loads(''.join(data))

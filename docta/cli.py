@@ -5,16 +5,16 @@ from __future__ import absolute_import, print_function, unicode_literals
 from future.builtins import super
 import argparse
 import os
-import os.path
 import sys
 import docta.project
 import docta.utils.server
 import docta.utils.json as json
+import docta.utils.fs as fs
+import docta.utils.log as log
 
 CONFIG_FILE = 'docta.conf'
 OK_CODE = 0
 ERROR_CODE = 2
-ERROR_LOGFILE = 'docta-error.log'
 
 
 def main():
@@ -24,35 +24,22 @@ def main():
     try:
         cli = CLI()
         cli.run()
-    except Exception as e:
-        exit_with_error(e.message)
+    except Exception as exc:
+        message = getattr(exc, 'message', str(exc))
+        exit_with_error(message, exc=exc)
 
-    cleanup_log()
+    log.cleanup()
     return OK_CODE
 
 
-def exit_with_error(message):
+def exit_with_error(message, exc=None):
     """
     Show error message and exit with error code.
     """
-    sys.stderr.write('Error: %s\n' % message)
-
-    import traceback
-    out = open(ERROR_LOGFILE, 'wb')
-    out.write('-' * 60 + '\n')
-    traceback.print_exc(limit=20, file=out)
-    out.write('-' * 60 + '\n')
-    out.close()
-
+    log.error(message)
+    if exc:
+        log.traceback()
     sys.exit(ERROR_CODE)
-
-
-def cleanup_log():
-    """
-    Cleanup error log.
-    """
-    if os.path.isfile(ERROR_LOGFILE):
-        os.unlink(ERROR_LOGFILE)
 
 
 class CustomArgumentParser(argparse.ArgumentParser):
@@ -110,9 +97,12 @@ class CLI(object):
     def current_dir(self):
         return os.getcwd()
 
+    def script_name(self):
+        return fs.basename(sys.argv[0])
+
     def current_config(self):
         if not hasattr(self, '_config'):
-            config_path = os.path.join(self.current_dir(), self.args.config)
+            config_path = fs.join(self.current_dir(), self.args.config)
             
             try:
                 config_file = open(config_path, 'r')
@@ -122,7 +112,7 @@ class CLI(object):
             try:
                 self._config = json.load(config_file)
             except Exception as e:
-                raise Exception("bad JSON format in config! %s" % e.message)
+                raise Exception("bad JSON format in config! %s" % log.exc_to_str(e))
 
             config_file.close()
 
@@ -131,7 +121,7 @@ class CLI(object):
     def current_project(self):
         if not hasattr(self, '_project'):
             self._project = docta.project.Project(self.current_dir(),
-                                                       **self.current_config())
+                                                  **self.current_config())
         return self._project
 
     ##
@@ -148,7 +138,18 @@ class CLI(object):
         self.parser.print_help()
 
     def cmd_init(self):
-        self.current_project().init()
+        import docta
+
+        # test if dir is empty
+        for name in os.listdir(self.current_dir()):
+            if not name.startswith('.'):
+                command = ' '.join((self.script_name(), self.args.command))
+                exit_with_error("Current dir is not empty. Please run `%s` in empty dir." % command)
+
+        # copy initial project
+        source_dir = fs.real(fs.dirname(docta.__file__))
+        initial_dir = fs.join(source_dir, 'initial', 'default')
+        fs.cp(initial_dir, self.current_dir())
 
     def cmd_serve(self):
         project = self.current_project()

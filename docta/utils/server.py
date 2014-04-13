@@ -12,7 +12,7 @@ DEFAULT_PORT = 8000
 try:
     import http.server
     HTTPServer = http.server.HTTPServer
-    HTTPRequestHandler = http.server.BaseHTTPRequestHandler
+    HTTPRequestHandler = http.server.SimpleHTTPRequestHandler
 # Python 2.x server
 except ImportError:
     import BaseHTTPServer

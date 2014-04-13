@@ -51,12 +51,6 @@ class Project(object):
             renderer = render_class(self)
             renderer.render()
 
-    def init(self):
-        """
-        Init empty project.
-        """
-        raise Exception(NotImplemented)
-
     def input_dir(self, config):
         """
         Full input dir path for specified config.
