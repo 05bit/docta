@@ -29,14 +29,14 @@ class Project(object):
         """
         self.tree = []
 
-        load_tree = docta.chapter.Chapter.load_tree  # shortcut
         for chapter_config in self.config.get('chapters', []):
             config = self.config.copy()
             config.update(chapter_config)
             # print("Chapter config: %s" % config)
 
-            chapter = load_tree(self.input_dir(config),
-                                config, nav_path=config.get('base_nav_path', ''))
+            nav_path = config.get('base_nav_path', '')
+            chapter = docta.chapter.load_tree(self.input_dir(config),
+                                              config, nav_path=nav_path)
             self.tree.append(chapter)
             # self.print_tree(self.tree[-1])
 

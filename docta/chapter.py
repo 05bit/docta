@@ -10,10 +10,17 @@ import docta.utils.meta as meta
 INDEX_FILE = 'index.md'
 
 
-class Chapter(object):
+def load_tree(path, config, nav_path=''):
     """
-    Chapter is a data container for documents (pages), chapter are
-    organized hierarchically.
+    Load chapters tree. Only Markdown text based chapters
+    handled at the moment.
+    """
+    return TextChapter.load_tree(path, config, nav_path)
+
+
+class BaseChapter():
+    """
+    Base data container, chapters are organized hierarchically.
     """
     def __init__(self, config, title, nav_path, is_index=False):
         # config
@@ -45,6 +52,89 @@ class Chapter(object):
 
     def load_meta(self, file_path):
         """
+        Load meta and update base chapter info.
+        """
+        self.meta = self.extract_meta(in_file)
+        self.file_path = file_path
+        self.file_name = fs.basename(file_path)
+        self.title = self.meta.get('title', self.title)
+        self.sorting = self.meta.get('sorting', self.title)
+
+    def load_content(self):
+        """
+        Load content. Meta have to be loaded before loading content!
+        """
+        raise Exception(NotImplemented)
+
+    def flush_content(self):
+        """
+        Flush chapter content. We're going to do load-render-flush on every
+        chaper render so we won't store whole chapters data in memory.
+        """
+        self.content = None
+
+    def add_child(self, child):
+        """
+        Add child chapter.
+        """
+        self.children.append(child)
+        child.parent = self
+        if not child.is_index:
+            child.rel_dir_path = self.rel_dir_path
+
+    @classmethod
+    def extract_meta(cls, in_file):
+        """
+        Extract meta from file.
+        """
+        raise Exception(NotImplemented)
+
+    @classmethod
+    def load_tree(cls, path, config, nav_path=''):
+        """
+        Load chapters tree.
+        """
+        raise Exception(NotImplemented)
+
+    @classmethod
+    def slug_by_name(cls, file_name):
+        """
+        Chapter slug by file name.
+        """
+        return file_name.rsplit('.', 1)[0]
+
+    @classmethod
+    def is_relpath_masked(self, relative):
+        """
+        Checks if relative dir path is masked (not rendered) in build.
+        """
+        for name in relative.strip(fs.sep).split(fs.sep):
+            if self.is_name_masked(name):
+                return True
+        return False
+
+    @classmethod
+    def is_name_masked(self, name):
+        """
+        Checks if file/dir name is masked. Hide '_' and '.' based names by default.
+        """
+        return name.startswith('_') or name.startswith('.')
+
+    @classmethod
+    def is_file_to_render(self, name):
+        """
+        Checks if file is to render. Redefine this method in subclass
+        to filter files that should really be handled.
+        """
+        return True
+
+
+class TextChapter(BaseChapter):
+    """
+    Chapter for text documents formatted with YAML + Markdown.
+    """
+    def load_meta(self, file_path):
+        """
         Load meta from file.
         """
         with open(file_path, 'r') as in_file:
@@ -63,18 +153,14 @@ class Chapter(object):
             with open(self.file_path, 'r') as in_file:
                 self.content = meta.stripped(in_file)
 
-    def flush_content(self):
+    @classmethod
+    def extract_meta(cls, in_file):
         """
-        Flush chapter content. We're going to do load-render-flush on every
-        chaper render so we won't store whole chapters data in memory.
+        Extract meta from YAML file header.
         """
-        self.content = None
-
-    def add_child(self, child):
-        self.children.append(child)
-        child.parent = self
-        if not child.is_index:
-            child.rel_dir_path = self.rel_dir_path
+        with open(file_path, 'r') as in_file:
+            return meta.extract(in_file)
+        return {}
 
     @classmethod
     def load_tree(cls, path, config, nav_path=''):
@@ -131,27 +217,6 @@ class Chapter(object):
 
         # print ("chapter: %s, files: %s, dirs: %s" % (str(chapter), files, dirs))
         return chapter
-
-    @classmethod
-    def slug_by_name(cls, name):
-        return name.rsplit('.', 1)[0]
-
-    @classmethod
-    def is_relpath_masked(self, relative):
-        """
-        Checks if relative dir path is masked (not rendered) in build.
-        """
-        for name in relative.strip(fs.sep).split(fs.sep):
-            if self.is_name_masked(name):
-                return True
-        return False
-
-    @classmethod
-    def is_name_masked(self, name):
-        """
-        Checks if file/dir name is masked.
-        """
-        return name.startswith('_') or name.startswith('.')
 
     @classmethod
     def is_file_to_render(self, name):
