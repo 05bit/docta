@@ -107,25 +107,32 @@ class Renderer(base.BaseRenderer):
         else:
             return base_url
 
-    def get_main_menu(self):
+    def main_menu_config(self):
         """
         Main menu config.
         """
         config = self.project.config['output'][self.out_format]
         return config.get('main_menu', [])
 
+    def theme_config(self):
+        """
+        Theme config.
+        """
+        config = self.project.config['output'][self.out_format]
+        return config.get('theme', {})
+
     def template_globals(self):
         base_url = self.project.config['server']['base_url'].rstrip('/')
         assets_url = self.project.config['server']['assets_url'].rstrip('/')
-        url_external = lambda u: '://' in u
-        url_abs = lambda u: u.startswith('/')
-        url = lambda u: (url_external(u) or url_abs(u)) and u or '/'.join((base_url, u))
+        icon_template = self.get_template('icon.html')
+        icon_context = {'theme': self.theme_config()}
         return {
             'asset': lambda a: '/'.join((base_url, assets_url, a)),
             'chapter_url': lambda chapter: self.get_url(chapter),
             'markdown': lambda text: md.html(text),
-            'url': url,
-            'url_external': url_external,
+            'url': lambda u: url(u, base_url=base_url),
+            'url_external': lambda u: url_external(u),
+            'icon': lambda i: icon_template.render(icon=i, **icon_context) if i else ''
         }
 
     def template_context(self, chapter):
@@ -138,8 +145,23 @@ class Renderer(base.BaseRenderer):
                 'logo': self.project.config['logo'],
                 'copyright': self.project.config['copyright'],
                 'tree': self.project.tree,
-                'main_menu': self.get_main_menu(),
+                'main_menu': self.main_menu_config(),
             },
             'chapter': chapter,
+            'theme': self.theme_config(),
         }
         return context
+
+
+##
+## Template functions
+##
+
+def url_external(u):
+    return '://' in u
+
+def url_abs(u):
+    return u.startswith('/')
+
+def url(u, base_url=''):
+    return (url_external(u) or url_abs(u)) and u or '/'.join((base_url, u))

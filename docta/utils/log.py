@@ -2,6 +2,7 @@
 Logging and print helpers.
 """
 from __future__ import absolute_import, print_function, unicode_literals
+import os
 import sys
 import docta.utils.fs as fs
 

@@ -1,6 +1,7 @@
 ---
 title: Home
 sorting: A
+icon: home
 ---
 
 Hello, I'm Docta example!

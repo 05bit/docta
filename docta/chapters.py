@@ -58,6 +58,7 @@ class BaseChapter():
         self.file_name = fs.basename(file_path)
         self.title = self.meta.get('title', self.title)
         self.sorting = self.meta.get('sorting', self.title)
+        self.icon = self.meta.get('icon', None)
 
     def load_content(self):
         """
