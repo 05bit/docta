@@ -52,7 +52,7 @@ class Renderer(base.BaseRenderer):
         # load content - render - flush content
         chapter.load_content()
 
-        if not chapter.content is None:
+        if not chapter.content_raw is None:
             out_file_path = fs.join(output_dir, chapter.rel_dir_path,
                                     self.get_html_name(chapter))
             fs.mkdirs(fs.dirname(out_file_path))

@@ -5,6 +5,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 import os
 import docta.utils.fs as fs
 import docta.utils.meta as meta
+import docta.utils.md as md
 
 
 def load_tree(path, config, nav_path=''):
@@ -24,7 +25,8 @@ class BaseChapter():
         self.config = config
         self.file_path = None
         # data
-        self.content = None
+        self.content_raw = None
+        self.content_html = None
         self.title = title
         self.meta = {}
         # structure
@@ -68,7 +70,8 @@ class BaseChapter():
         Flush chapter content. We're going to do load-render-flush on every
         chaper render so we won't store whole chapters data in memory.
         """
-        self.content = None
+        self.content_raw = None
+        self.content_html = None
 
     def add_child(self, child):
         """
@@ -138,7 +141,8 @@ class TextChapter(BaseChapter):
         """
         if self.file_path:
             with open(self.file_path, 'r') as in_file:
-                self.content = meta.stripped(in_file)
+                self.content_raw = meta.stripped(in_file)
+                self.content_html = md.html(self.content_raw)
 
     @classmethod
     def extract_meta(cls, file_path):

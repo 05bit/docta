@@ -1,11 +1,11 @@
 Before v0.1
 ===========
 
-* `init` command
 * Basic docs
 
 ### Completed:
 
++ `init` command
 + Smarter scanning - look for index files in depth
 + **Top menu config**
 + **Multiple sources - sub-projects or sub-directories**
