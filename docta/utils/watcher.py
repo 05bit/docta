@@ -18,8 +18,8 @@ REBUILD_DELAY = 0.5  # in seconds
 
 def watch(project):
     """
-    Start watching project input directory to perform automatic
-    builds on changes.
+    Start watching project input directory to perform automatic builds on changes.
+    It doesn't lock thread. Returns `watchdog.observers.Observer` instance.
     """
     log.message("Watching directory: %s" % project.input_dir())
     observer = watchdog.observers.Observer()

@@ -162,16 +162,22 @@ class CLI(object):
 
     def cmd_serve(self):
         project = self.current_project()
-        path = project.output_dir('html')
-        port = project.config['server']['port']
 
-        # watch
+        # check config
+        if 'server' in project.config:
+            config = project.config['server']
+        else:
+            exit_with_error("No 'server' section found in '%s'." % self.args.config)
+        
+        # watch - doesn't lock thread without explicit .join()
         if self.args.watch:
             import docta.utils.watcher as watcher
             watcher.watch(project)
 
-        # serve
-        docta.utils.server.run(path, port=port)
+        # server - runs and locks current thread
+        docta.utils.server.run(project.output_dir('html'),
+                               host=config.get('host', None),
+                               port=config.get('port', None))
 
 
 if __name__ == '__main__':

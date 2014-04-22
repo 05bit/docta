@@ -21,12 +21,12 @@ except ImportError:
     HTTPRequestHandler = SimpleHTTPServer.SimpleHTTPRequestHandler
 
 
-def run(path, port=DEFAULT_PORT):
+def run(path, host=None, port=None):
     """
     Start simple HTTP server at specified web root directory and port.
     """
     os.chdir(path)
-    server_address = (DEFAULT_HOST, port)
+    server_address = (host or DEFAULT_HOST, port or DEFAULT_PORT)
     print("Serving directory: %s" % path)
     print("Running at http://%s:%s" % server_address)
     print(datetime.datetime.now().strftime('%d %B %Y - %H:%M:%S'))
