@@ -80,9 +80,10 @@ class Project(object):
         """
         Copy resources to output directory.
         """
-        in_resources = fs.path_for_dir(self.path, self.config.get('resources', '_resources'))
-        out_resources = self.output_dir(out_format)
-        fs.cp(in_resources, out_resources, overwrite=True)
+        if self.config.get('resources', None):
+            in_resources = fs.path_for_dir(self.path, self.config['resources'])
+            out_resources = self.output_dir(out_format)
+            fs.cp(in_resources, out_resources, overwrite=True)
 
     def print_tree(self, root):
         """
