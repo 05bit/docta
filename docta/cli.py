@@ -61,29 +61,32 @@ class CLI(object):
     def init_parser(self):
         parser = CustomArgumentParser(description=self.__doc__)
         parser.add_argument('-c', '--config',
-                            help='config file to use [default: %(default)s]',
+                            help="config file to use [default: %(default)s]",
                             default=CONFIG_FILE)
         sub_parsers = parser.add_subparsers(dest='command')
 
         # Command: init
         cmd_init = sub_parsers.add_parser('init',
-            help='start new docs project in current directory')
+            help="start new docs project in current directory")
 
         # Command: config
         cmd_config = sub_parsers.add_parser('config',
-            help='test and show project config')
+            help="test and show project config")
 
         # Command: build
         cmd_build = sub_parsers.add_parser('build',
-            help='build project')
+            help="build project")
 
         # Command: serve
-        cmd_help = sub_parsers.add_parser('serve',
+        cmd_serve = sub_parsers.add_parser('serve',
             help='start local server for testing')
+        cmd_serve.add_argument('-w', '--watch',
+                               action='store_true',
+                               help="watch for changes and rebuild")
 
         # Command: help
         cmd_help = sub_parsers.add_parser('help',
-            help='show this help message and exit')
+            help="show this help message and exit")
 
         self.parser = parser
         self.args = parser.parse_args()
@@ -155,6 +158,13 @@ class CLI(object):
         project = self.current_project()
         path = project.output_dir('html')
         port = project.config['server']['port']
+
+        # watch
+        if self.args.watch:
+            import docta.utils.watcher as watcher
+            watcher.watch(project)
+
+        # serve
         docta.utils.server.run(path, port=port)
 
 

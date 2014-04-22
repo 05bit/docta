@@ -1,6 +1,9 @@
 Before v0.1
 ===========
 
+* Watch & rebuild
+* YAML config
+* Success messages, build time
 * Basic docs
 
 ### Completed:

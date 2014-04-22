@@ -51,10 +51,12 @@ class Project(object):
             renderer = render_class(self)
             renderer.render()
 
-    def input_dir(self, config):
+    def input_dir(self, config=None):
         """
         Full input dir path for specified config.
         """
+        if config is None:
+            config = self.config
         return fs.real(fs.join(self.path, config.get('input_path', '.')))
 
     def output_dir(self, out_format=None):

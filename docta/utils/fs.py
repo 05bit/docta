@@ -4,8 +4,10 @@ Shortcuts for file system operations.
 import os
 import os.path
 import shutil
+import fnmatch
 import docta.exceptions
 
+# os-module shortcuts
 dirname = os.path.dirname
 basename = os.path.basename
 join = os.path.join
@@ -13,6 +15,9 @@ real = os.path.realpath
 sep = os.path.sep
 isfile = os.path.isfile
 isdir = os.path.isdir
+
+# matching
+match = fnmatch.fnmatch
 
 
 @docta.exceptions.suppress(OSError, IOError)
