@@ -6,6 +6,7 @@ from future.builtins import super
 import argparse
 import os
 import sys
+import time
 import docta.project
 import docta.utils.server
 import docta.utils.json as json
@@ -132,7 +133,12 @@ class CLI(object):
     ##
 
     def cmd_build(self):
+        t0 = time.time()
         self.current_project().build(['html'])
+        t1 = time.time()
+        log.message("Project build time: %.2fms" % (1000.0 * (t1 - t0)))
+        log.message("Run '%(name)s serve' command for serving or '%(name)s serve --watch'." %
+            {'name': self.script_name()})
 
     def cmd_config(self):
         print(json.dumps(self.current_config(), indent=4))
