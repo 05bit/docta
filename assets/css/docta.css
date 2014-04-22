@@ -1,0 +1,55 @@
+/** Bootstrap + Pygments glue */
+.source {
+    border-radius: 4px;
+}
+.source pre {
+    color: inherit;
+    background-color: inherit;
+    border: none;
+}
+
+/** Navbar brand logo */
+.navbar-brand {
+    background-repeat: no-repeat;
+    background-position: 15px center;
+}
+    .navbar-brand.logo {
+        padding-left: 0px;
+    }
+
+/** Navbar top links */
+.navbar-default .navbar-nav>li.active>a,
+.navbar-default .navbar-nav>li.active>a:hover {
+    background-color: #ffffff;
+    border-top: 3px solid #428bca;
+    padding-top: 12px;    
+}
+.navbar-default .navbar-nav>li>a:hover {
+    color: #2a6496;
+    border-top: 3px solid #428bca;
+    padding-top: 12px;    
+}
+
+/** Sidebar */
+.nav-tree.nav>li>a.index {
+    font-weight: bold;
+}
+.nav-tree.nav li {
+    list-style: none;
+}
+    .nav-tree.nav li>a {
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    .nav-tree.nav li>hr {
+        margin: 5px 0px;
+    }
+    .nav-tree.nav li li {
+        margin-left: 15px;
+    }
+
+/** Footer */
+.footer .text-muted a {
+    color: inherit;
+    text-decoration: underline;
+}
