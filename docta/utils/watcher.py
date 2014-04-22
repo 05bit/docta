@@ -110,4 +110,4 @@ class ProjectEventHandler(events.FileSystemEventHandler):
         """
         Shortcut for nicely formatted event logging.
         """
-        log.message("  %s" % text)
+        log.success("  %s" % text)

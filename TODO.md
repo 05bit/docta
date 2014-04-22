@@ -1,11 +1,11 @@
 Before v0.1
 ===========
 
-* YAML config
 * Basic docs
 
 ### Completed:
 
++ YAML config
 + Success messages, build time
 + Watch & rebuild
 + `init` command

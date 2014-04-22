@@ -7,13 +7,14 @@ import argparse
 import os
 import sys
 import time
+import yaml
 import docta.project
 import docta.utils.server
 import docta.utils.json as json
 import docta.utils.fs as fs
 import docta.utils.log as log
 
-CONFIG_FILE = 'docta.conf'
+CONFIG_FILE = 'config.yaml'
 OK_CODE = 0
 ERROR_CODE = 2
 
@@ -107,16 +108,23 @@ class CLI(object):
     def current_config(self):
         if not hasattr(self, '_config'):
             config_path = fs.join(self.current_dir(), self.args.config)
-            
+            config_format = (self.args.config.rsplit('.', 1)[-1]).lower()
+
             try:
                 config_file = open(config_path, 'r')
             except:
                 raise Exception("can't load config file: %s" % config_path)
 
-            try:
-                self._config = json.load(config_file)
-            except Exception as e:
-                raise Exception("bad JSON format in config! %s" % log.exc_to_str(e))
+            if config_format == 'json':  # JSON config
+                try:
+                    self._config = json.load(config_file)
+                except Exception as e:
+                    raise Exception("bad JSON format in config! %s" % log.exc_to_str(e))
+            else:  # try YAML by default
+                try:
+                    self._config = yaml.load(config_file)
+                except Exception as e:
+                    raise Exception("bad YAML format in config %s" % log.exc_to_str(e))
 
             config_file.close()
 
@@ -136,12 +144,13 @@ class CLI(object):
         t0 = time.time()
         self.current_project().build(['html'])
         t1 = time.time()
-        log.message("Project build time: %.2fms" % (1000.0 * (t1 - t0)))
+        log.success("Project build time: %.2fms" % (1000.0 * (t1 - t0)))
         log.message("Run '%(name)s serve' command for serving or '%(name)s serve --watch'." %
             {'name': self.script_name()})
 
     def cmd_config(self):
-        print(json.dumps(self.current_config(), indent=4))
+        print(yaml.safe_dump(self.current_config(), default_flow_style=False, allow_unicode=True))
+        # print(json.dumps(self.current_config(), indent=4))
 
     def cmd_help(self):
         self.parser.print_help()

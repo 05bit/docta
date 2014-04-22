@@ -4,6 +4,7 @@ Simple HTTP-server for local testing.
 from __future__ import absolute_import, print_function, unicode_literals
 import datetime
 import os
+import docta.utils.log as log
 
 DEFAULT_HOST = '127.0.0.1'
 DEFAULT_PORT = 8000
@@ -27,8 +28,8 @@ def run(path, host=None, port=None):
     """
     os.chdir(path)
     server_address = (host or DEFAULT_HOST, port or DEFAULT_PORT)
-    print("Serving directory: %s" % path)
-    print("Running at http://%s:%s" % server_address)
-    print(datetime.datetime.now().strftime('%d %B %Y - %H:%M:%S'))
+    log.message("Serving directory: %s" % path)
+    log.message("Running at http://%s:%s" % server_address)
+    log.message(datetime.datetime.now().strftime('%d %B %Y - %H:%M:%S'))
     httpd = HTTPServer(server_address, HTTPRequestHandler)
     httpd.serve_forever()
