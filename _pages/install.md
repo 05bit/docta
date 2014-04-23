@@ -19,7 +19,7 @@ Versions 2.7.x and 3.2.x or newer are great, older ones may also work.
 From GitHub
 ===========
 
-If you have Python installed but pip-way is not for you for some reasons:
+If you have Python installed but pip-way is not for you for some reason:
 
 ```bash
 $ git clone https://github.com/05bit/python-docta.git
