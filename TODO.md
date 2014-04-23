@@ -2,15 +2,16 @@ v0.2 planed
 ===========
 
 * watching templates and resources
+* highlight root chapters in main nav on child page
 
 v0.1 in progress
 ================
 
 * Chapters sorting
-* Basic docs
 
 ### Completed:
 
++ Basic docs
 + YAML config
 + Success messages, build time
 + Watch & rebuild
