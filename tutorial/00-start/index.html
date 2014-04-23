@@ -60,7 +60,57 @@
     <div class="row">
         <div class="col-lg-9 main-content">
             
-    
+    <p>[draft]</p>
+<div class="source"><pre><span class="nv">$ </span>mkdir docs
+<span class="nv">$ </span><span class="nb">cd </span>docs
+<span class="nv">$ </span>docta init
+</pre></div>
+
+<p>Review config:</p>
+<div class="source"><pre><span class="c1"># Project info</span>
+<span class="l-Scalar-Plain">title</span><span class="p-Indicator">:</span>      <span class="l-Scalar-Plain">My Project</span>
+<span class="l-Scalar-Plain">logo</span><span class="p-Indicator">:</span>       <span class="l-Scalar-Plain">img/logo.png</span>
+<span class="l-Scalar-Plain">copyright</span><span class="p-Indicator">:</span>  <span class="s">&#39;&amp;copy;</span><span class="nv"> </span><span class="s">2014</span><span class="nv"> </span><span class="s">My</span><span class="nv"> </span><span class="s">Project&#39;</span>
+
+<span class="c1"># Data structure</span>
+<span class="l-Scalar-Plain">chapters</span><span class="p-Indicator">:</span>
+    <span class="c1"># Main chapters</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">index</span><span class="p-Indicator">:</span>            <span class="l-Scalar-Plain">index.md</span>
+      <span class="l-Scalar-Plain">input_path</span><span class="p-Indicator">:</span>       <span class="l-Scalar-Plain">.</span>
+
+<span class="c1"># Rendering</span>
+<span class="l-Scalar-Plain">output</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">html</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">build_path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">./_html</span>
+    <span class="l-Scalar-Plain">theme</span><span class="p-Indicator">:</span>
+        <span class="l-Scalar-Plain">icons</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">awesome</span>
+        <span class="c1">#icons: glyphicon</span>
+    <span class="l-Scalar-Plain">main_menu</span><span class="p-Indicator">:</span>
+        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">title</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">Quickstart</span>
+          <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span>    <span class="l-Scalar-Plain">quickstart/</span>
+        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">title</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">Install</span>
+          <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span>    <span class="l-Scalar-Plain">install/</span>
+          <span class="l-Scalar-Plain">icon</span><span class="p-Indicator">:</span>   <span class="l-Scalar-Plain">download</span>
+        <span class="c1">#- title:  Development</span>
+        <span class="c1">#  url:    https://github.com/05bit/python-docta</span>
+<span class="l-Scalar-Plain">resources</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">./_resources</span>
+<span class="l-Scalar-Plain">templates</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">./_templates</span>
+
+<span class="c1"># Serving html</span>
+<span class="l-Scalar-Plain">server</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span>       <span class="l-Scalar-Plain">127.0.0.1</span>
+    <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span>       <span class="l-Scalar-Plain">8000</span>
+    <span class="l-Scalar-Plain">base_url</span><span class="p-Indicator">:</span>   <span class="l-Scalar-Plain">/</span>
+    <span class="l-Scalar-Plain">assets_url</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">assets/</span>
+    <span class="l-Scalar-Plain">watch</span><span class="p-Indicator">:</span>      <span class="p-Indicator">[</span><span class="s">&#39;*.html&#39;</span><span class="p-Indicator">,</span> <span class="s">&#39;*.md&#39;</span><span class="p-Indicator">]</span>
+</pre></div>
+
+<p>Start server with auto-rebiuld:</p>
+<div class="source"><pre><span class="nv">$ </span>docta serve -w
+</pre></div>
+
+<p>Start editing and creating content: <strong>.md</strong> files, assets images or other resources like PDFs etc.</p>
+
 
         </div>
         <div class="col-lg-3">

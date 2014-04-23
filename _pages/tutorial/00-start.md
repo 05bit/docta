@@ -1,3 +1,60 @@
 ---
 title: Start and configure
 ---
+
+[draft]
+
+```bash
+$ mkdir docs
+$ cd docs
+$ docta init
+```
+
+Review config:
+
+```yaml
+# Project info
+title:      My Project
+logo:       img/logo.png
+copyright:  '&copy; 2014 My Project'
+
+# Data structure
+chapters:
+    # Main chapters
+    - index:            index.md
+      input_path:       .
+
+# Rendering
+output:
+  html:
+    build_path: ./_html
+    theme:
+        icons: awesome
+        #icons: glyphicon
+    main_menu:
+        - title:  Quickstart
+          url:    quickstart/
+        - title:  Install
+          url:    install/
+          icon:   download
+        #- title:  Development
+        #  url:    https://github.com/05bit/python-docta
+resources:  ./_resources
+templates:  ./_templates
+
+# Serving html
+server:
+    host:       127.0.0.1
+    port:       8000
+    base_url:   /
+    assets_url: assets/
+    watch:      ['*.html', '*.md']
+```
+
+Start server with auto-rebiuld:
+
+```bash
+$ docta serve -w
+``` 
+
+Start editing and creating content: **.md** files, assets images or other resources like PDFs etc.
