@@ -14,7 +14,7 @@ $ python --version
 Python 2.7.6
 ```
 
-Versions 2.7.x and 3.2.x are great, older ones may also work.
+Versions 2.7.x and 3.2.x or newer are great, older ones may also work.
 
 From GitHub
 ===========
@@ -36,7 +36,7 @@ $ sudo python setup.py install
 Result
 ======
 
-On successful installation you should be able to run `docta` command
+After successful installation you should be able to run `docta` command
 
 ```bash
 $ docta
@@ -65,4 +65,4 @@ optional arguments:
 
 If you see it, you have won!
 
-[Tutorial &rarr;](../tutorial/)
+[Read tutorial &rarr;](../tutorial/)

@@ -14,7 +14,7 @@ output:
   html:
     build_path: .
     theme:
-        icons: fa
+        icons: awesome
         #icons: glyphicon
     main_menu:
         - title:  Quickstart

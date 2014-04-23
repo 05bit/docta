@@ -2,4 +2,14 @@
 
 {% block content %}
     {{ chapter.content_html }}
+
+    <hr>
+
+    <ul>
+    {% for child in chapter.children %}
+        <li>
+            <a href="{{ chapter_url(child) }}">{{ child.title }}</a>
+        </li>
+    {% endfor %}
+    </ul>
 {% endblock %}
