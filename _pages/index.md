@@ -2,7 +2,8 @@
 title: Docta
 ---
 
-# [**Docta**](https://github.com/05bit/python-docta) is a new healing docs kit.
+[**Docta**](http://docta.05bit.com) is a new healing docs kit.
+==============================================================
 
 Technically speaking, it's a **static-site generator** slightly focused on **building documetation**.
 
