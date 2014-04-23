@@ -8,6 +8,13 @@
     border: none;
 }
 
+/** Content images */
+.main-content p img {
+    padding: 4px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+}
+
 /** Navbar brand logo */
 .navbar-brand {
     background-repeat: no-repeat;

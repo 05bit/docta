@@ -21,6 +21,9 @@
 </head>
 <body>
 
+<a href="https://github.com/05bit/python-docta" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0; z-index: 1001" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Docta at GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+
+
 <nav class="navbar navbar-default navbar-static-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
@@ -39,11 +42,11 @@
                 </li>
                 
                 <li >
-                    <a href="/#install" ><i class="fa fa-download fa-lg"></i> Install</a>
+                    <a href="/tutorial/" >Tutorial</a>
                 </li>
                 
                 <li >
-                    <a href="https://github.com/05bit/python-docta" target="_blank"><i class="fa fa-github fa-lg"></i> Development</a>
+                    <a href="/#install" ><i class="fa fa-download fa-lg"></i> Install</a>
                 </li>
                 
             </ul>
@@ -55,48 +58,54 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-lg-9">
+        <div class="col-lg-9 main-content">
             
-    <h1>Meet Docta!</h1>
+    <h2><a href="https://github.com/05bit/python-docta"><strong>Docta</strong></a> is a new healing documentation kit.</h2>
 
-<p><big><a href="https://github.com/05bit/python-docta"><strong>Docta</strong></a> is a new healing documentation kit.</big></p>
-
-<p>It&#39;s in early stage at the moment, but all basics is working!</p>
+<p>Technically speaking, it&#39;s a <strong>static-site generator slightly focused on building documetation</strong>!</p>
 
 <p><a name="quickstart"></a></p>
 
 <h3>Quickstart</h3>
 
-<p>Setup new project:</p>
+<p>Setup a new project:</p>
 <div class="source"><pre><span class="nv">$ </span>mkdir docs
 <span class="nv">$ </span><span class="nb">cd </span>docs
 <span class="nv">$ </span>docta init
 </pre></div>
 
-<p>And project is ready for building!</p>
+<p>That&#39;s it! Project is ready for building!</p>
 <div class="source"><pre><span class="nv">$ </span>docta build
 <span class="nv">$ </span>docta serve --watch
 </pre></div>
 
-<p>After running <em>build</em> and <em>serve</em> commands you should see something like:</p>
+<p>After running <code>build</code> and <code>serve</code> commands you should see something like:</p>
 <div class="source"><pre>Serving directory: /home/user/docs/_html
 Running at http://127.0.0.1:8000
 23 April 2014 - 02:14:36
 </pre></div>
 
+<p>Now you may edit or create <strong>.md</strong> files, starting from <strong>index.md</strong> and so on with your favorite text editor.</p>
+
+<p><img src="assets/img/screenshot1.jpg" alt="Docta .md file example"></p>
+
 <p><a name="overview"></a></p>
 
 <h2>Overview</h2>
 
-<p>Consider Docta as <strong>static-site generator focused on building docs</strong>!</p>
+<ul>
+<li>Powered by <a href="https://help.github.com/articles/github-flavored-markdown" target="_blank"><strong>Markdown with flavours</strong></a></li>
+<li>Plays well with <a href="https://pages.github.com/" target="_blank"><strong>GitHub Pages</strong></a></li>
+<li>Programming language agnistic tool (except installation)</li>
+<li>Custom logo and navigation are defined in nice config</li>
+<li>Smart preview server with auto-rebuild</li>
+</ul>
 
-<p>Essential features:</p>
+<p>More customization related features:</p>
 
 <ul>
-<li>Powered by GitHub Flavoured Markdown</li>
-<li>Easy way styles and templates overriding</li>
-<li>Custom navigation</li>
-<li>Smart preview server with auto-rebuild</li>
+<li>Basic themes powered by <a href="http://getbootstrap.com/" target="_blank"><strong>Bootstrap</strong></a></li>
+<li>Clean and explicit templates powered by <a href="http://jinja.pocoo.org/docs/templates/" target="_blank"><strong>Jinja</strong></a></li>
 </ul>
 
 <p><a name="install"></a></p>
@@ -107,7 +116,7 @@ Running at http://127.0.0.1:8000
 <div class="source"><pre><span class="nv">$ </span>pip install docta
 </pre></div>
 
-<p>More complicated</p>
+<p>Install latest development version:</p>
 <div class="source"><pre><span class="nv">$ </span>git clone https://github.com/05bit/python-docta.git
 <span class="nv">$ </span><span class="nb">cd </span>python-docta
 <span class="nv">$ </span>python setup.py install

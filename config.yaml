@@ -19,12 +19,11 @@ output:
     main_menu:
         - title:  Quickstart
           url:    '/#quickstart'
+        - title:  Tutorial
+          url:    tutorial/
         - title:  Install
           url:    '/#install'
           icon:   download
-        - title:  Development
-          url:    https://github.com/05bit/python-docta
-          icon:   github
 # resources:  ./_resources
 templates:  ./_templates
 
