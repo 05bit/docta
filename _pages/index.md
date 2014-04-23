@@ -17,7 +17,7 @@ Easiest way to install is via <a href="http://www.pip-installer.org/en/latest/qu
 $ pip install docta
 ```
 
-[Read more about installing Docta &rarr;](install/)
+[Read more about installing &rarr;](install/)
 
 <a name="quickstart"></a>
 Quickstart
