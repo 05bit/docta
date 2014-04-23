@@ -1,3 +1,10 @@
+/** Typography tweaks */
+body { font-size: 16px; }
+h1 { margin-bottom: 15px; margin-top: 40px; }
+    h1:first-child { margin-top: 20px; }
+h2 { margin-bottom: 15px; margin-top: 40px; }
+    h2:first-child { margin-top: 20px; }
+
 /** Bootstrap + Pygments glue */
 .source {
     border-radius: 4px;

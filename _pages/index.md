@@ -40,16 +40,15 @@ Now you may edit or create **.md** files, starting from **index.md** and so on w
 Overview
 --------
 
+Docta is a **lightweight** tool built on top of **modern and proven** technologies.
+
 * Powered by <a href="https://help.github.com/articles/github-flavored-markdown" target="_blank">**Markdown with flavours**</a>
-* Plays well with <a href="https://pages.github.com/" target="_blank">**GitHub Pages**</a>
-* Programming language agnistic tool (except installation)
-* Custom logo and navigation are defined in nice config
-* Smart preview server with auto-rebuild
-
-More customization related features:
-
+* Plays really well with <a href="https://pages.github.com/" target="_blank">**GitHub Pages**</a>
+* Nice readable config format, well it's YAML
+* Configurable navigation with icons option
 * Basic themes powered by <a href="http://getbootstrap.com/" target="_blank">**Bootstrap**</a>
 * Clean and explicit templates powered by <a href="http://jinja.pocoo.org/docs/templates/" target="_blank">**Jinja**</a>
+* Smart preview server with auto-rebuild
 
 <a name="install"></a>
 Install
@@ -61,10 +60,9 @@ Easiest way to install is via <a href="http://www.pip-installer.org/en/latest/qu
 $ pip install docta
 ```
 
-Install latest development version:
+[Read more about installing Docta &rarr;](install/)
 
-```bash
-$ git clone https://github.com/05bit/python-docta.git
-$ cd python-docta
-$ python setup.py install
-```
+License
+-------
+
+Docta is distributed for free and its source code is licensed under the [BSD 3-Clause License](https://github.com/05bit/python-docta/blob/master/LICENSE).
