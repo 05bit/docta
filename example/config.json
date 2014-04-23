@@ -30,7 +30,7 @@
                 {"url": "https://github.com/05bit/python-docta", "title": "Development"}
             ],
             "theme": {
-                "icons": "fa"
+                "icons": "awesome"
                 //"icons": "glyphicon"
             }
         }
