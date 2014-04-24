@@ -100,16 +100,7 @@ class ProjectPathEventHandler(events.FileSystemEventHandler):
         self.config = self.project.config.copy()
         self.events_file = (events.FileModifiedEvent, events.FileCreatedEvent, events.FileDeletedEvent)
         self.events_dirs = (events.DirMovedEvent, events.DirDeletedEvent)
-        log.message("Watching patterns: %s" % ' '.join(self.get_patterns()))
-
-    def get_patterns(self):
-        """
-        Get watched file patterns from project `server:watch` config section.
-        Returns a `list` of UNIX-like file masks, e.g. `['*.html', '*.md']`.
-        """
-        return (self.config
-            .setdefault('server', {})
-            .setdefault('watch', WATCH_PATTERNS_DEFAULT))
+        log.message("Watching patterns: %s" % ' '.join(WATCH_PATTERNS_DEFAULT))
 
     def on_any_event(self, event):
         """
@@ -117,7 +108,7 @@ class ProjectPathEventHandler(events.FileSystemEventHandler):
         """
         if isinstance(event, self.events_file):
             name = fs.basename(event.src_path)
-            if any([fs.match(name, mask) for mask in self.get_patterns()]):
+            if any([fs.match(name, mask) for mask in WATCH_PATTERNS_DEFAULT]):
                 log.success("  %s" % "file updated: %s" % event.src_path)
                 self.observer.needs_rebuild()
         elif isinstance(event, self.events_dirs):
