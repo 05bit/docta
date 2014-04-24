@@ -4,6 +4,7 @@ Command line interface (CLI) for Docta.
 from __future__ import absolute_import, print_function, unicode_literals
 from future.builtins import super
 import argparse
+import datetime
 import os
 import sys
 import time
@@ -177,6 +178,9 @@ class CLI(object):
             config = project.config['server']
         else:
             exit_with_error("No 'server' section found in '%s'." % self.args.config)
+
+        log.message("Starting server at %s " % 
+            datetime.datetime.now().strftime('%d %B %Y - %H:%M:%S'))
         
         # watch - doesn't lock thread without explicit .join()
         if self.args.watch:
@@ -184,9 +188,13 @@ class CLI(object):
             watcher.watch(project)
 
         # server - runs and locks current thread
-        docta.utils.server.run(project.output_dir('html'),
-                               host=config.get('host', None),
-                               port=config.get('port', None))
+        try:
+            docta.utils.server.run(project.output_dir('html'),
+                                   host=config.get('host', None),
+                                   port=config.get('port', None))            
+        except KeyboardInterrupt as e:
+            log.message("...\nServer was stopped at %s " % 
+                datetime.datetime.now().strftime('%d %B %Y - %H:%M:%S'))
 
 
 if __name__ == '__main__':

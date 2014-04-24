@@ -28,14 +28,8 @@ def run(path, host=None, port=None):
     """
     os.chdir(path)
     server_address = (host or DEFAULT_HOST, port or DEFAULT_PORT)
-    log.message("Starting server at %s " % 
-        datetime.datetime.now().strftime('%d %B %Y - %H:%M:%S'))
     log.message("Serving directory: %s" % path)
     log.message("Running at http://%s:%s" % server_address)
     log.message("Press ^C to stop server")
     httpd = HTTPServer(server_address, HTTPRequestHandler)
-    try:
-        httpd.serve_forever()
-    except KeyboardInterrupt:
-        log.message("... Server was stopped at %s " % 
-            datetime.datetime.now().strftime('%d %B %Y - %H:%M:%S'))
+    httpd.serve_forever()
