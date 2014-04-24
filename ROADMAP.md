@@ -1,5 +1,5 @@
-v0.2 planed
-===========
+v0.2 planned
+============
 
 * watching templates and resources
 * highlight root chapters in main nav on child page
