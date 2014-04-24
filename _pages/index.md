@@ -1,5 +1,5 @@
 ---
-title: Docta
+title: Home
 ---
 
 [**Docta**](http://docta.05bit.com) is a new healing docs kit.
