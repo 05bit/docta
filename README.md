@@ -5,6 +5,8 @@ Technically speaking, it's a **static-site generator** slightly focused on **bui
 
 Project homepage: http://docta.05bit.com
 
+Current version: **v0.1**, 2014 Apr 24
+
 Install
 -------
 
