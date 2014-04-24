@@ -4,10 +4,8 @@ v0.2 planned
 * watching templates and resources
 * highlight root chapters in main nav on child page
 
-v0.1 in completed
-=================
-
-Preparing for release!
+v0.1 released
+=============
 
 + Chapters sorting
 + Basic docs
