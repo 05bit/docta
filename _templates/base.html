@@ -65,7 +65,7 @@
                         {% if top.children %}
                             {% for ch1 in top.children %}
                             <li {% if ch1 == chapter %}class="active"{% endif %}>
-                                <a href="{{ chapter_url(ch1) }}" {% if ch1.is_index and ch1.children %}class="index"{% endif %}>{{ icon(ch1.icon) }}{{ ch1.title }}</a>
+                                <a href="{{ chapter_url(ch1) }}" {% if top.depth > 1 %}class="index"{% endif %}>{{ icon(ch1.icon) }}{{ ch1.title }}</a>
                                 {% if ch1.children %}
                                 <ul class="nav nav-pills nav-stacked">
                                     {% for ch2 in ch1.children %}
