@@ -7,6 +7,8 @@ title: Home
 
 Technically speaking, it's a **static-site generator** slightly focused on **building documetation**.
 
+Current version: **v0.1**, 2014 Apr 24
+
 <a name="install"></a>
 Install
 -------
