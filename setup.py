@@ -1,9 +1,13 @@
 """
-Docta is ...
+Docta is a new healing docs kit. Technically speaking, it's a static-site
+generator slightly focused on building documetation.
+
+Project homepage:
+http://docta.05bit.com
 """
 from setuptools import setup, find_packages
 
-__version__ = '0.0.1'
+__version__ = '0.1'
 
 install_requires=[
     'future',
@@ -27,7 +31,7 @@ setup(
     author='Alexey Kinyov',
     author_email='rudy@05bit.com',
     url='https://github.com/05bit/python-docta',
-    description='A new documentation kit.',
+    description='Docta is a new healing docs kit.',
     long_description=__doc__,
     license='BSD',
     zip_safe=False,
