@@ -31,6 +31,8 @@ class BaseChapter():
         self.meta = {}
         # structure
         self.parent = None
+        self.level = 0
+        self.depth = 0
         self.children = []
         # navigation
         self.nav_path = nav_path
@@ -78,10 +80,23 @@ class BaseChapter():
         """
         Add child chapter.
         """
-        self.children.append(child)
         child.parent = self
+        child.level = child.parent.level + 1
         if not child.is_index:
             child.rel_dir_path = self.rel_dir_path
+
+        self.children.append(child)
+        self.children.sort(cmp=lambda x, y: cmp(x.sorting, y.sorting))
+        self.update_depth()
+
+    def update_depth(self):
+        """
+        Update tree depth.
+        """
+        if self.children:
+            self.depth = max(self.depth, *[(ch.depth + 1) for ch in self.children])
+            if self.parent:
+                self.parent.update_depth()
 
     @classmethod
     def extract_meta(cls, file_path):
