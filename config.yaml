@@ -21,9 +21,11 @@ output:
         url:    '/#quickstart'
       - title:  Tutorial
         url:    tutorial/
+      - title:  Feedback
+        url:    feedback/
       - title:  Install
         url:    '/#install'
-        icon:   download
+        # icon:   download
 # resources:  ./_resources
 templates:  ./_templates
 
