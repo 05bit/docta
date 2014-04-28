@@ -112,7 +112,7 @@ class CLI(object):
             config_format = (self.args.config.rsplit('.', 1)[-1]).lower()
 
             try:
-                config_file = open(config_path, 'r')
+                config_file = fs.open(config_path, 'r')
             except:
                 raise Exception("can't load config file: %s" % config_path)
 

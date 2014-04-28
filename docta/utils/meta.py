@@ -31,7 +31,7 @@ def stripped(stream):
                     meta_ended = True
 
     # TODO: Avoid double memory use? Oh yes, I'm aware
-    #       of premature optimization :)  
+    #       of premature optimization :)
     return ''.join(data)
 
 

@@ -4,6 +4,7 @@ Shortcuts for file system operations.
 import os
 import os.path
 import shutil
+import sys
 import fnmatch
 import docta.exceptions
 
@@ -18,6 +19,21 @@ isdir = os.path.isdir
 
 # matching
 match = fnmatch.fnmatch
+
+# open file
+if sys.version_info < (3, 0, 0):
+    import codecs
+    _open = codecs.open
+else:
+    _open = open
+
+def open(*args, **kwargs):
+    """
+    Replacement for old open() with new one with encoding param,
+    UTF-8 is default encoding.
+    """
+    kwargs.setdefault('encoding', 'UTF-8')
+    return _open(*args, **kwargs)
 
 
 @docta.exceptions.suppress(OSError, IOError)

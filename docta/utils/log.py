@@ -66,7 +66,7 @@ def traceback(out=None):
 
     need_close = False
     if out is None:
-        out = open(ERROR_LOGFILE, 'w')
+        out = fs.open(ERROR_LOGFILE, 'w')
         need_close = True
 
     out.write('-' * 60 + '\n')

@@ -65,7 +65,7 @@ class Renderer(base.BaseRenderer):
             else:
                 template = self.get_template('page.html')
 
-            with open(out_file_path, 'w') as out_file:
+            with fs.open(out_file_path, 'w') as out_file:
                 context = self.template_context(chapter)
                 html = template.render(**context)
                 out_file.write(html)
@@ -132,7 +132,8 @@ class Renderer(base.BaseRenderer):
             'markdown': lambda text: md.html(text),
             'url': lambda u: url(u, base_url=base_url),
             'url_external': lambda u: url_external(u),
-            'icon': lambda i: icon_template.render(icon=i, **icon_context) if i else ''
+            'icon': lambda i: icon_template.render(icon=i, **icon_context) if i else '',
+            'safe': lambda s: jinja2.Markup(s)
         }
 
     def template_context(self, chapter):

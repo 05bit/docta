@@ -156,7 +156,7 @@ class TextChapter(BaseChapter):
         Load content. Meta have to be loaded before loading content!
         """
         if self.file_path:
-            with open(self.file_path, 'r') as in_file:
+            with fs.open(self.file_path, 'r') as in_file:
                 self.content_raw = meta.stripped(in_file)
                 self.content_html = md.html(self.content_raw)
 
@@ -165,7 +165,7 @@ class TextChapter(BaseChapter):
         """
         Extract meta from YAML file header.
         """
-        with open(file_path, 'r') as in_file:
+        with fs.open(file_path, 'r') as in_file:
             return meta.extract(in_file)
         return {}
 
