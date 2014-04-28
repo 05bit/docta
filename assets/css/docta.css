@@ -1,11 +1,19 @@
 /** Typography tweaks */
 body {
     font-size: 16px;
+    font-weight: 300;
     font-family: 'Open Sans', 'sans-serif';
 }
-h1 { margin-bottom: 15px; margin-top: 40px; }
+h1, h2, h3, h4, h5, h6, .navbar-default {
+    font-family: 'Open Sans', 'sans-serif';
+}
+h1 {
+    margin-bottom: 15px; margin-top: 40px;
+}
     h1:first-child { margin-top: 20px; }
-h2 { margin-bottom: 15px; margin-top: 40px; }
+h2 {
+    margin-bottom: 15px; margin-top: 40px;
+}
     h2:first-child { margin-top: 20px; }
 
 /** Bootstrap + Pygments glue */
