@@ -15,7 +15,7 @@ h2 {
     margin-bottom: 15px; margin-top: 40px;
 }
     h2:first-child { margin-top: 20px; }
-.nav {
+.nav, .navbar-brand {
     font-weight: 400;
 }
 
