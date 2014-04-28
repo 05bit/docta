@@ -1,5 +1,8 @@
 /** Typography tweaks */
-body { font-size: 16px; }
+body {
+    font-size: 16px;
+    font-family: 'Open Sans', 'sans-serif';
+}
 h1 { margin-bottom: 15px; margin-top: 40px; }
     h1:first-child { margin-top: 20px; }
 h2 { margin-bottom: 15px; margin-top: 40px; }
@@ -35,12 +38,12 @@ h2 { margin-bottom: 15px; margin-top: 40px; }
 .navbar-default .navbar-nav>li.active>a,
 .navbar-default .navbar-nav>li.active>a:hover {
     background-color: #ffffff;
-    border-top: 3px solid #428bca;
+    border-top: 3px solid #76D6FF;
     padding-top: 12px;    
 }
 .navbar-default .navbar-nav>li>a:hover {
     color: #2a6496;
-    border-top: 3px solid #428bca;
+    border-top: 3px solid #76D6FF;
     padding-top: 12px;    
 }
 
@@ -67,3 +70,11 @@ h2 { margin-bottom: 15px; margin-top: 40px; }
     color: inherit;
     text-decoration: underline;
 }
+
+/** Home specials */
+.home h1 {
+    font-size: 56px;
+}
+    .home h1 img {
+        vertical-align: baseline;
+    }

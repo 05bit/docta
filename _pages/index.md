@@ -2,8 +2,11 @@
 title: Home
 ---
 
-[**Docta**](http://docta.05bit.com) is a new healing docs kit.
-==============================================================
+![Logo](assets/img/logo-48.png) Docta
+=====================================
+
+A new healing docs kit
+----------------------
 
 Technically speaking, it's a **static-site generator** slightly focused on **building documetation**.
 
