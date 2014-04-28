@@ -15,6 +15,9 @@ h2 {
     margin-bottom: 15px; margin-top: 40px;
 }
     h2:first-child { margin-top: 20px; }
+.nav {
+    font-weight: 400;
+}
 
 /** Bootstrap + Pygments glue */
 .source {
@@ -46,12 +49,12 @@ h2 {
 .navbar-default .navbar-nav>li.active>a,
 .navbar-default .navbar-nav>li.active>a:hover {
     background-color: #ffffff;
-    border-top: 3px solid #76D6FF;
+    border-top: 3px solid #67cdfa;
     padding-top: 12px;    
 }
 .navbar-default .navbar-nav>li>a:hover {
-    color: #2a6496;
-    border-top: 3px solid #76D6FF;
+    color: #67cdfa;
+    border-top: 3px solid #67cdfa;
     padding-top: 12px;    
 }
 
