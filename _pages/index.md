@@ -10,7 +10,7 @@ A new healing docs kit
 
 Technically speaking, it's a **static-site generator** slightly focused on **building documetation**.
 
-Current version: **v0.1**, 2014 Apr 24
+Current version: **v0.2a**, 2014 Apr 29
 
 <a name="install"></a>
 Install
