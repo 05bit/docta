@@ -86,7 +86,7 @@ class BaseChapter():
             child.rel_dir_path = self.rel_dir_path
 
         self.children.append(child)
-        self.children.sort(cmp=lambda x, y: cmp(x.sorting, y.sorting))
+        self.children.sort(key=lambda x: x.sorting)
         self.update_depth()
 
     def update_depth(self):
