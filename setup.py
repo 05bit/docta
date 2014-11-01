@@ -30,7 +30,7 @@ setup(
     version=str(__version__),
     author="Alexey Kinyov",
     author_email='rudy@05bit.com',
-    url='https://github.com/05bit/python-docta',
+    url='https://github.com/05bit/docta',
     description="Docta is a new healing docs kit.",
     long_description=__doc__,
     license='BSD',
