@@ -159,13 +159,13 @@ class CLI(object):
     def cmd_init(self):
         import docta
 
-        # test if dir is empty
+        # Test if dir is empty
         for name in os.listdir(self.current_dir()):
             if not name.startswith('.'):
                 command = ' '.join((self.script_name(), self.args.command))
                 exit_with_error("Current dir is not empty. Please run `%s` in empty dir." % command)
 
-        # copy initial project
+        # Copy initial project
         source_dir = fs.real(fs.dirname(docta.__file__))
         initial_dir = fs.join(source_dir, 'initial', 'default')
         fs.cp(initial_dir, self.current_dir())
@@ -173,7 +173,7 @@ class CLI(object):
     def cmd_serve(self):
         project = self.current_project()
 
-        # check config
+        # Check config
         if 'server' in project.config:
             config = project.config['server']
         else:
@@ -182,14 +182,18 @@ class CLI(object):
         log.message("Starting server at %s " % 
             datetime.datetime.now().strftime('%d %B %Y - %H:%M:%S'))
         
-        # watch - doesn't lock thread without explicit .join()
+        # Watch - doesn't lock thread without explicit .join()
         if self.args.watch:
             import docta.utils.watcher as watcher
             watcher.watch(project)
 
-        # server - runs and locks current thread
+        # Prepare output dir
+        output_dir = project.output_dir('html')
+        fs.mkdirs(output_dir)
+
+        # Server - runs and locks current thread
         try:
-            docta.utils.server.run(project.output_dir('html'),
+            docta.utils.server.run(output_dir,
                                    host=config.get('host', None),
                                    port=config.get('port', None))            
         except KeyboardInterrupt as e:
