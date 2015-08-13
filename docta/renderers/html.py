@@ -58,7 +58,9 @@ class Renderer(base.BaseRenderer):
             fs.mkdirs(fs.dirname(out_file_path))
             # print(out_file_path)
 
-            if home:
+            if 'template' in chapter.meta:
+                template = self.get_template(chapter.meta['template'])
+            elif home:
                 template = self.get_template('home.html')
             elif chapter.is_index:
                 template = self.get_template('index.html')
