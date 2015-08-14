@@ -11,8 +11,8 @@ __version__ = '0.2.4'
 
 install_requires=[
     'future',
-    'misaka',
-    # 'hoedown',  # seems unstable for now
+    # 'misaka',
+    'mistune',
     'watchdog',
     'jinja2',
     'PyYAML',
