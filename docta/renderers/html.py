@@ -6,7 +6,7 @@ from future.builtins import super
 import jinja2
 import docta.renderers.base as base
 import docta.utils.fs as fs
-import docta.utils.md as md
+import docta.utils.md2 as md
 import docta.utils.meta as meta
 
 HTML_INDEX = ('index', 'html')

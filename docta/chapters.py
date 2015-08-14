@@ -5,7 +5,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 import os
 import docta.utils.fs as fs
 import docta.utils.meta as meta
-import docta.utils.md as md
+import docta.utils.md2 as md
 
 
 def load_tree(path, config, nav_path=''):

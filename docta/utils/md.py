@@ -1,5 +1,5 @@
 """
-Provides unified Markdown rendering tools.
+Provides Markdown rendering utils on top of Misaka.
 """
 from __future__ import absolute_import, print_function, unicode_literals
 import misaka as m
