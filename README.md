@@ -5,7 +5,7 @@ Technically speaking, it's a **static-site generator** slightly focused on **bui
 
 Project homepage: http://docta.05bit.com
 
-Current version: **v0.1**, 2014 Apr 24
+Current version: **0.2.4a** from 2015 Aug 14 powered by Mistune or **0.2.3** running Misaka.
 
 Install
 -------
