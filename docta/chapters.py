@@ -1,5 +1,6 @@
 """
-Chapters handling. Every document page or directory is represented by Chapter.
+Chapters handling. Every document page or directory
+is represented by Chapter.
 """
 from __future__ import absolute_import, print_function, unicode_literals
 import os

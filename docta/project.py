@@ -70,6 +70,16 @@ class Project(object):
             output_rel_path = output
         return fs.path_for_dir(self.path, output_rel_path)
 
+    def assets_dir(self, out_format=None):
+        """
+        Output directory for assets and specified format.
+        """
+        output = self.config['output'][out_format]
+        if isinstance(output, dict):
+            output_rel_path = output.get('assets_path')
+            if output_rel_path:
+                return fs.path_for_dir(self.path, output_rel_path)
+
     def templates_dir(self):
         """
         Jinja templates directory.
@@ -84,6 +94,15 @@ class Project(object):
             in_resources = fs.path_for_dir(self.path, self.config['resources'])
             out_resources = self.output_dir(out_format)
             fs.cp(in_resources, out_resources, overwrite=True)
+
+    def copy_assets(self, out_format=None):
+        """
+        Copy assets to output directory.
+        """
+        if self.config.get('assets', None):
+            in_assets = fs.path_for_dir(self.path, self.config['assets'])
+            out_assets = self.assets_dir(out_format)
+            fs.cp(in_assets, out_assets, overwrite=True)
 
     def print_tree(self, root):
         """

@@ -37,6 +37,9 @@ class Renderer(base.BaseRenderer):
             self.render_chapter(chapter, home=home)
             home = False  # only the first root chapter is 'home'
 
+        # Copy assets
+        self.project.copy_assets(out_format)
+
         # Copy resources
         self.project.copy_resources(out_format)
 
@@ -125,7 +128,7 @@ class Renderer(base.BaseRenderer):
 
     def template_globals(self):
         base_url = self.project.config['server']['base_url'].rstrip('/')
-        assets_url = self.project.config['server']['assets_url'].rstrip('/')
+        assets_url = self.project.config['server']['assets_url'].strip('/')
         icon_template = self.get_template('icon.html')
         icon_context = {'theme': self.theme_config()}
         return {
