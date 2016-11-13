@@ -192,13 +192,9 @@ class CLI(object):
         fs.mkdirs(output_dir)
 
         # Server - runs and locks current thread
-        try:
-            docta.utils.server.run(output_dir,
-                                   host=config.get('host', None),
-                                   port=config.get('port', None))            
-        except KeyboardInterrupt as e:
-            log.message("...\nServer was stopped at %s " % 
-                datetime.datetime.now().strftime('%d %B %Y - %H:%M:%S'))
+        docta.utils.server.run(output_dir,
+                               host=config.get('host', None),
+                               port=config.get('port', None))
 
 
 if __name__ == '__main__':

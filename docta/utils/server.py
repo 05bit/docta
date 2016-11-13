@@ -32,4 +32,10 @@ def run(path, host=None, port=None):
     log.message("Running at http://%s:%s" % server_address)
     log.message("Press ^C to stop server")
     httpd = HTTPServer(server_address, HTTPRequestHandler)
-    httpd.serve_forever()
+
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        httpd.shutdown()
+        log.message("...\nServer was stopped at %s " %
+            datetime.datetime.now().strftime('%d %B %Y - %H:%M:%S'))
