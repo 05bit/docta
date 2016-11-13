@@ -4,6 +4,7 @@ Provides HTML rendered.
 from __future__ import absolute_import, print_function, unicode_literals
 from future.builtins import super
 import jinja2
+import random
 import docta.renderers.base as base
 import docta.utils.fs as fs
 import docta.utils.md2 as md
@@ -138,7 +139,8 @@ class Renderer(base.BaseRenderer):
             'url': lambda u: url(u, base_url=base_url),
             'url_external': lambda u: url_external(u),
             'icon': lambda i: icon_template.render(icon=i, **icon_context) if i else '',
-            'safe': lambda s: jinja2.Markup(s)
+            'safe': lambda s: jinja2.Markup(s),
+            'random': random.random,
         }
 
     def template_context(self, chapter):

@@ -13,7 +13,7 @@ import docta.utils.log as log
 import docta.utils.fs as fs
 
 # Defaults
-WATCH_PATTERNS_DEFAULT = ['*.html', '*.md']
+WATCH_PATTERNS_DEFAULT = ['*.html', '*.md', '*.js', '*.css']
 REBUILD_DELAY = 0.5  # in seconds
 
 
