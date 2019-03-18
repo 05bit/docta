@@ -7,7 +7,7 @@ http://docta.05bit.com
 """
 from setuptools import setup, find_packages
 
-__version__ = '0.2.4'
+__version__ = '0.2.5'
 
 install_requires=[
     'future',

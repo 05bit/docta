@@ -19,8 +19,6 @@ __all__ = ['markdown']
 ALIAS_EXT = {
     'autolink': m.EXT_AUTOLINK,
     'fenced_code': m.EXT_FENCED_CODE,
-    'lax_html': m.EXT_LAX_HTML_BLOCKS,
-    'lax_html_blocks': m.EXT_LAX_HTML_BLOCKS,
     'no_intra_emphasis': m.EXT_NO_INTRA_EMPHASIS,
     'space_headers': m.EXT_SPACE_HEADERS,
     'strikethrough': m.EXT_STRIKETHROUGH,
