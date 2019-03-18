@@ -123,7 +123,7 @@ class CLI(object):
                     raise Exception("bad JSON format in config! %s" % log.exc_to_str(e))
             else:  # try YAML by default
                 try:
-                    self._config = yaml.load(config_file)
+                    self._config = yaml.full_load(config_file)
                 except Exception as e:
                     raise Exception("bad YAML format in config %s" % log.exc_to_str(e))
 

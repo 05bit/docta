@@ -64,4 +64,4 @@ class Meta(dict):
                 meta_data.append(next_line)
 
         if meta_data:
-            self.update(yaml.load(''.join(meta_data)))
+            self.update(yaml.full_load(''.join(meta_data)))
