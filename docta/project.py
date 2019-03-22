@@ -4,6 +4,7 @@ Docta projects handler.
 from __future__ import absolute_import, print_function, unicode_literals
 from future.builtins import super
 import os
+import hashlib
 import docta.chapters
 import docta.exceptions
 import docta.render
@@ -19,9 +20,9 @@ class Project(object):
     Project data handler: scans project directories, manages resources,
     creates empty project, builds project.
     """
-    def __init__(self, path, **config):
+    def __init__(self, path, config=None):
         self.path = path
-        self.config = config
+        self.config = config or {}
 
     def load(self):
         """
@@ -90,7 +91,7 @@ class Project(object):
         """
         Copy resources to output directory.
         """
-        if self.config.get('resources', None):
+        if self.config.get('resources'):
             in_resources = fs.path_for_dir(self.path, self.config['resources'])
             out_resources = self.output_dir(out_format)
             fs.cp(in_resources, out_resources, overwrite=True)
@@ -99,10 +100,20 @@ class Project(object):
         """
         Copy assets to output directory.
         """
-        if self.config.get('assets', None):
+        if self.config.get('assets'):
             in_assets = fs.path_for_dir(self.path, self.config['assets'])
             out_assets = self.assets_dir(out_format)
-            fs.cp(in_assets, out_assets, overwrite=True)
+            if out_assets:
+                fs.cp(in_assets, out_assets, overwrite=True)
+
+    def asset_hash(self, rel_path):
+        """
+        Get asset file checksum.
+        """
+        if self.config.get('assets'):
+            assets_dir = fs.path_for_dir(self.path, self.config['assets'])
+            path = os.path.join(assets_dir, rel_path)
+            return hashlib.md5(open(path, 'rb').read()).hexdigest()
 
     def print_tree(self, root):
         """

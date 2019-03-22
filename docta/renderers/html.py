@@ -3,6 +3,7 @@ Provides HTML rendered.
 """
 from __future__ import absolute_import, print_function, unicode_literals
 from future.builtins import super
+from functools import partial
 import jinja2
 import random
 import docta.renderers.base as base
@@ -103,7 +104,7 @@ class Renderer(base.BaseRenderer):
         #     bits = chapter.file_name.rsplit('.', 1)
         # return '.'.join((bits[0], HTML_INDEX[1]))
 
-    def get_url(self, chapter):
+    def get_chapter_url(self, chapter):
         """
         Get URL for chapter.
         """
@@ -133,11 +134,11 @@ class Renderer(base.BaseRenderer):
         icon_template = self.get_template('icon.html')
         icon_context = {'theme': self.theme_config()}
         return {
-            'asset': lambda a: '/'.join((base_url, assets_url, a)),
-            'chapter_url': lambda chapter: self.get_url(chapter),
-            'markdown': lambda text: md.html(text),
-            'url': lambda u: url(u, base_url=base_url),
-            'url_external': lambda u: url_external(u),
+            'asset': partial(get_asset_url, project=self.project),
+            'chapter_url': self.get_chapter_url,
+            'markdown': md.html,
+            'url': partial(url_full, base_url=base_url),
+            'url_external': url_external,
             'icon': lambda i: icon_template.render(icon=i, **icon_context) if i else '',
             'safe': lambda s: jinja2.Markup(s),
             'random': random.random,
@@ -149,11 +150,12 @@ class Renderer(base.BaseRenderer):
         """
         context = {
             'project': {
-                'title': self.project.config['title'],
-                'logo': self.project.config['logo'],
-                'copyright': self.project.config['copyright'],
-                'tree': self.project.tree,
+                'title': self.project.config.get('title'),
+                'logo': self.project.config.get('logo'),
+                'copyright': self.project.config.get('copyright'),
+                'extras': self.project.config.get('extras'),
                 'main_menu': self.main_menu_config(),
+                'tree': self.project.tree,
             },
             'chapter': chapter,
             'theme': self.theme_config(),
@@ -162,14 +164,28 @@ class Renderer(base.BaseRenderer):
 
 
 ##
-## Template functions
+## Template helper functions
 ##
+
+
+def get_asset_url(rel_path, project, use_hash=False):
+    base_url = project.config['server']['base_url'].rstrip('/')
+    assets_url = project.config['server']['assets_url'].strip('/')
+    full_url = '/'.join((base_url, assets_url, rel_path))
+    if use_hash:
+        hash_str = project.asset_hash(rel_path)
+        full_url += '?_=%s' % hash_str
+    return full_url
+
 
 def url_external(u):
     return '://' in u
 
+
 def url_abs(u):
     return u.startswith('/')
 
-def url(u, base_url=''):
+
+def url_full(u, base_url=''):
     return (url_external(u) or url_abs(u)) and u or '/'.join((base_url, u))
+

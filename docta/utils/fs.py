@@ -74,17 +74,18 @@ def cp(src, dst, overwrite=False):
 
 
 def issub(path, base):
-    """
-    Cheks if `path` is a sub-path for `base`.
+    """Cheks if `path` is a sub-path for `base`.
     """
     return not os.path.relpath(path, base).startswith('..')
 
 
-def path_for_file(base, relative):
-    """Get real directory path by base dir and relative file path."""
-    return real(dirname(join(base, relative)))
+# def parent_for_file(base, relative):
+#     """Get real parent directory path by base dir and relative file path.
+#     """
+#     return real(dirname(join(base, relative)))
 
 
 def path_for_dir(base, relative):
-    """Get real directory path by base dir and relative dir path."""
+    """Get real directory path by base dir and relative dir path.
+    """
     return real(join(base, relative))

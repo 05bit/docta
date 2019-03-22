@@ -133,8 +133,9 @@ class CLI(object):
 
     def current_project(self):
         if not hasattr(self, '_project'):
-            self._project = docta.project.Project(self.current_dir(),
-                                                  **self.current_config())
+            self._project = docta.project.Project(
+                self.current_dir(),
+                config=self.current_config())
         return self._project
 
     ##
