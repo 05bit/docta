@@ -138,7 +138,7 @@ class Renderer(base.BaseRenderer):
             'chapter_url': self.get_chapter_url,
             'markdown': md.html,
             'url': partial(url_full, base_url=base_url),
-            'url_external': url_external,
+            'url_external': url_is_external,
             'icon': lambda i: icon_template.render(icon=i, **icon_context) if i else '',
             'safe': lambda s: jinja2.Markup(s),
             'random': random.random,
@@ -178,14 +178,19 @@ def get_asset_url(rel_path, project, use_hash=False):
     return full_url
 
 
-def url_external(u):
+def url_is_external(u):
     return '://' in u
 
 
-def url_abs(u):
+def url_is_absolute(u):
     return u.startswith('/')
 
 
-def url_full(u, base_url=''):
-    return (url_external(u) or url_abs(u)) and u or '/'.join((base_url, u))
+def url_is_anchor(u):
+    return u.startswith('#')
 
+
+def url_full(u, base_url=''):
+    if url_is_external(u) or url_is_absolute(u) or url_is_anchor(u):
+        return u
+    return '/'.join((base_url, u))
